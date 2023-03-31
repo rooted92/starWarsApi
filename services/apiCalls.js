@@ -1,3 +1,4 @@
+// Global Variables
 let next = 'https://swapi.dev/api/people/';
 let prev = null;
 
@@ -10,7 +11,7 @@ let prev = null;
 const GetAllCharacters = async (url) => {
     const response = await fetch(url);
     const data = await response.json();
-    console.log(data);
+    // console.log(data);
     next = data.next;
     prev = data.previous;
     return data;
@@ -34,6 +35,13 @@ const GetFilms = async () => {
     return data;
 }
 
+const GetVehicles = async () => {
+    const response = await fetch('https://swapi.dev/api/vehicles/');
+    const data = await response.json();
+    console.log(data);
+    return data;
+}
+
 const GetData = async () => {
     const response = await fetch('https://swapi.dev/api/');
     const data = await response.json();
@@ -52,4 +60,16 @@ const GetStarshipsFromCharacter = async (url) => {
     return data;
 }
 
-export { GetFilms, GetData, GetAllCharacters, NextPage, PreviousPage, GetHomeworldFromCharacter, GetStarshipsFromCharacter };
+const GetVehiclesFromCharacter = async url => {
+    const response = await fetch(url);
+    const data = await response.json();
+    return data;
+}
+
+const GetFilmsFromCharacter = async url => {
+    const response = await fetch(url);
+    const data = response.json();
+    return data;
+}
+
+export { GetFilms, GetData, GetAllCharacters, NextPage, PreviousPage, GetHomeworldFromCharacter, GetStarshipsFromCharacter, GetVehiclesFromCharacter, GetFilmsFromCharacter, GetVehicles };

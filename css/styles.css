@@ -12,9 +12,9 @@ body {
 }
 
 .card:hover {
-    color: #FB2576 !important;
+    color: rgb(251, 37, 119) !important;
     background-color: #150050bd !important;
-    transform: scale(1.15);
+    transform: scale(1.1);
 }
 
 main a {
