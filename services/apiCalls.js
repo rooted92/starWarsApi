@@ -29,10 +29,11 @@ const PreviousPage = async () => {
     }
 }
 
-const GetFilms = async () => {
-    const response = await fetch('https://swapi.dev/api/films/')
+const GetFilmsByTitle = async (url) => {
+    const response = await fetch(url)
     const data = await response.json();
-    return data;
+    // console.log(data);
+    return data.title;
 }
 
 const GetVehicles = async () => {
@@ -66,10 +67,18 @@ const GetVehiclesFromCharacter = async url => {
     return data;
 }
 
+const GetPilotNamesForVehicles = async url => {
+    const response = await fetch(url);
+    const data = await response.json();
+    // console.log(data);
+    return data.name;
+}
+// GetPilotNamesForVehicles("https://swapi.dev/api/people/13/");
+
 const GetFilmsFromCharacter = async url => {
     const response = await fetch(url);
-    const data = response.json();
+    const data = await response.json();
     return data;
 }
 
-export { GetFilms, GetData, GetAllCharacters, NextPage, PreviousPage, GetHomeworldFromCharacter, GetStarshipsFromCharacter, GetVehiclesFromCharacter, GetFilmsFromCharacter, GetVehicles };
+export { GetFilmsByTitle, GetData, GetAllCharacters, NextPage, PreviousPage, GetHomeworldFromCharacter, GetStarshipsFromCharacter, GetVehiclesFromCharacter, GetFilmsFromCharacter, GetVehicles, GetPilotNamesForVehicles };

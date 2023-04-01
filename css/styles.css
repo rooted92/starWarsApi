@@ -29,3 +29,12 @@ main a:hover {
     font-size: 1.5rem;
     font-weight: 500;
 }
+
+.navbar-brand img {
+    height: 6rem;
+    width: auto;
+}
+
+.starFighterLink:hover {
+    transform: scale(1.2);
+}

@@ -90,26 +90,26 @@ const CreateCharacterCard = async (func, inject) => {
         homeworld.className = 'card-text mx-1 text-nowrap text-truncate';
         homeworld.innerHTML = `Homeworld: <span class="text-primary">${homeworldData.name}</span>`;// will fetch data later, same for ones above
         let birthyear = document.createElement('h5');
-        birthyear.className = 'card-text mx-1 text-nowrap';
+        birthyear.className = 'card-text mx-1 text-wrap';
         birthyear.textContent = `Birthyear: ${person.birth_year}`;
 
         let mass = document.createElement('h5');
-        mass.className = 'card-text mx-1 text-nowrap';
+        mass.className = 'card-text mx-1 text-wrap';
         mass.textContent = `Mass: ${person.mass}`;
         let height = document.createElement('h5');
-        height.className = 'card-text mx-1 text-nowrap';
+        height.className = 'card-text mx-1 text-wrap';
         height.textContent = `Height: ${person.height}`;
         let skinColor = document.createElement('h5');
-        skinColor.className = 'card-text mx-1 text-nowrap';
+        skinColor.className = 'card-text mx-1 text-wrap';
         skinColor.textContent = `Skin Color: ${person.skin_color}`;
         let hairColor = document.createElement('h5');
-        hairColor.className = 'card-text mx-1 text-nowrap';
+        hairColor.className = 'card-text mx-1 text-wrap';
         hairColor.textContent = `Hair Color: ${person.hair_color}`;
         let eyeColor = document.createElement('h5');
-        eyeColor.className = 'card-text mx-1 text-nowrap';
+        eyeColor.className = 'card-text mx-1 text-wrap';
         eyeColor.textContent = `Eye Color: ${person.eye_color}`;
         let gender = document.createElement('h5');
-        gender.className = 'card-text mx-1 text-nowrap';
+        gender.className = 'card-text mx-1 text-wrap';
         gender.textContent = `Gender: ${person.gender}`;
         let name = document.createElement('h3');
         name.className = 'card-title text-warning';
@@ -132,18 +132,18 @@ const CreateCharacterCard = async (func, inject) => {
     });
 
     let cont = document.createElement('div');
-    cont.className = 'container';
+    cont.className = 'container font-monospace';
     cont.append(btnRow, cardsRow);
 
     prevButton.addEventListener('click', async function () {
-        inject.innerHTML = '<div class="d-flex justify-content-center"><div class="spinner-border text-warning" role="status"></div></div>';
+        inject.innerHTML = '<div class="row"><div class="col-12 d-flex flex-column align-items-center floater"><img src="../assets/images/icons8-baby-yoda-144.png" alt="Baby Yoda Loading Icon"><p class="text-white font-monospace fs-2">Loading...</p></div></div>';
         func = await PreviousPage();
         inject.innerHTML = '';
         CreateCharacterCard(func, inject);
     })
 
     nextButton.addEventListener('click', async function () {
-        inject.innerHTML = '<div class="d-flex justify-content-center"><div class="spinner-border text-warning" role="status"></div></div>';
+        inject.innerHTML = '<div class="row"><div class="col-12 d-flex flex-column align-items-center floater"><img src="../assets/images/icons8-baby-yoda-144.png" alt="Baby Yoda Loading Icon"><p class="text-white font-monospace fs-2">Loading...</p></div></div>';
         func = await NextPage();
         inject.innerHTML = '';
         CreateCharacterCard(func, inject);
