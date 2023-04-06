@@ -35,6 +35,15 @@ main a:hover {
     width: auto;
 }
 
+.navbar-toggler-icon {
+    background: #f9d71c !important;
+    color: black;
+}
+
 .starFighterLink:hover {
     transform: scale(1.2);
+}
+
+.form-select {
+    margin-left: 1rem;
 }
