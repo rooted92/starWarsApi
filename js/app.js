@@ -1,4 +1,4 @@
-import { CreateSearchedCharacterCard, ActivateStarFighter } from "../services/functions.js";
+import { CreateSearchedCharacterCard, ActivateStarFighter, CreateSearchedVehicleElements } from "../services/functions.js";
 
 // Global Variables
 let userInput = document.querySelector('#userInput');
@@ -19,19 +19,19 @@ const SearchCategory = async (category = 'people', search) => {
 }
 
 // Event Listeners
-selectInput.addEventListener('click', function(){
+selectInput.addEventListener('click', function () {
     // console.log(selectInput.value);
     categoryPicked = selectInput.value;
     console.log('Category picked: ', categoryPicked);
 })
 
-userInput.addEventListener('change', function(){
+userInput.addEventListener('change', function () {
     // console.log(userInput.value);
     userSearch = userInput.value;
     console.log("User's search: ", userSearch);
 })
 
-searchBtn.addEventListener('click', async function(){
+searchBtn.addEventListener('click', async function () {
     console.log('clicked')
     console.log(userSearch);
     injectHere.innerHTML = `<div class="row">
@@ -44,9 +44,12 @@ searchBtn.addEventListener('click', async function(){
     injectHere.innerHTML = '';
     userInput.value = '';
     console.log(selectionData);
-    if(categoryPicked === 'people'){
+    if (categoryPicked === 'people') {
         CreateSearchedCharacterCard(selectionData, injectHere);
-    } else if(selectionData.results.length === 0){
+    }
+    else if (categoryPicked === 'vehicles') {
+        CreateSearchedVehicleElements(selectionData, injectHere);
+    } else if (selectionData.results.length === 0) {
         injectHere.innerHTML = `
         <div class="row justify-content-center fadeIn">
             <div class="col-6 border border-danger border-3 bg-dark rounded p-3">
@@ -58,11 +61,12 @@ searchBtn.addEventListener('click', async function(){
         `;
     }
     else {
-        CreateSearchedCharacterCard(selectionData, injectHere);
+        // CreateSearchedCharacterCard(selectionData, injectHere);
+        console.log(selectionData);
     }
-    
+
 });
 
-starFighter.addEventListener('click', function(){
+starFighter.addEventListener('click', function () {
     ActivateStarFighter(starFighter);
 })
