@@ -61,7 +61,7 @@ searchBtn.addEventListener('click', async function () {
         `;
     }
     else {
-        // CreateSearchedCharacterCard(selectionData, injectHere);
+        CreateSearchedCharacterCard(selectionData, injectHere);
         console.log(selectionData);
     }
 
