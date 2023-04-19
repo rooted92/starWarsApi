@@ -1,4 +1,4 @@
-import { GetStarshipsFromCharacter, GetHomeworldFromCharacter, GetVehiclesFromCharacter, GetFilmsFromCharacter, PreviousPage, NextPage, GetFilmsByTitle, GetNextVehicles, GetPreviousVechicles, GetPilotNamesForVehicles } from "./apiCalls.js";
+import { GetStarshipsFromCharacter, GetHomeworldFromCharacter, GetVehiclesFromCharacter, GetFilmsFromCharacter, PreviousPage, NextPage, GetFilmsByTitle, GetNextVehicles, GetPreviousVechicles, GetPilotNamesForVehicles } from "./data.js";
 
 // Make Character cards function/
 
@@ -528,5 +528,8 @@ const CreateSearchedVehicleElements = async (func, inject) => {
     inject.append(mainCont);
 }
 
+const CreateWelcomeMessage = () => {
+    
+}
 
-export { CreateCharacterCard, ActivateStarFighter, CreateVehicleElements, CreateSearchedCharacterCard, CreateSearchedVehicleElements };
+export { CreateCharacterCard, ActivateStarFighter, CreateVehicleElements, CreateSearchedCharacterCard, CreateSearchedVehicleElements, CreateWelcomeMessage };

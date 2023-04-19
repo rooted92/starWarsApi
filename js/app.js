@@ -1,4 +1,5 @@
-import { CreateSearchedCharacterCard, ActivateStarFighter, CreateSearchedVehicleElements } from "../services/functions.js";
+import { CreateSearchedCharacterCard, ActivateStarFighter, CreateSearchedVehicleElements, CreateCharacterCard } from "../services/functions.js";
+// import { GetRandomCategoryItem } from "../services/data.js";
 
 // Global Variables
 let userInput = document.querySelector('#userInput');
@@ -7,9 +8,10 @@ let selectInput = document.querySelector('#selectInput');
 const injectHere = document.querySelector('#injectHere');
 const starFighter = document.querySelector('#starFighter');
 let userSearch, categoryPicked, selectionData;
+let categoriesArr = ['people', 'vehicles', 'starships', 'planets', 'species', 'films'];
+
 
 // Functions
-
 const SearchCategory = async (category = 'people', search) => {
     console.log(category, search);
     const response = await fetch(`https://swapi.dev/api/${category}/?search=${search}`);
@@ -17,6 +19,8 @@ const SearchCategory = async (category = 'people', search) => {
     console.log(data);
     return data;
 }
+
+// await GetRandomCategoryItem(categoriesArr, injectHere);
 
 // Event Listeners
 selectInput.addEventListener('click', function () {

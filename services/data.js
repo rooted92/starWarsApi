@@ -1,3 +1,5 @@
+import { CreateCharacterCard, CreateVehicleElements } from "./functions.js";
+
 // Global Variables
 let next = 'https://swapi.dev/api/people/';
 let prev = null;
@@ -107,4 +109,21 @@ const GetFilmsFromCharacter = async url => {
     return data;
 }
 
-export { GetFilmsByTitle, GetData, GetAllCharacters, NextPage, PreviousPage, GetHomeworldFromCharacter, GetStarshipsFromCharacter, GetVehiclesFromCharacter, GetFilmsFromCharacter, GetVehicles, GetPilotNamesForVehicles, GetNextVehicles, GetPreviousVechicles };
+// Functions for home page
+// const GetRandomCategoryItem = async (arr, inject) => {
+//     let randomIndex = Math.floor(Math.random() * arr.length);
+//     console.log(arr[randomIndex]);
+//     const response = await fetch(`https://swapi.dev/api/${arr[randomIndex]}/`);
+//     const data = await response.json();
+//     console.log(data.results);
+//     if(arr[randomIndex] === 'people'){
+//         console.log('call the function to create people elments');
+//         await CreateCharacterCard(data, inject);
+//     } else if( arr[randomIndex] === 'vehicles'){
+//         console.log('Call the function to create vehicle elements');
+//         await CreateVehicleElements(data, inject);
+//     }
+//     return data;
+// }
+
+export { GetFilmsByTitle, GetData, GetAllCharacters, NextPage, PreviousPage, GetHomeworldFromCharacter, GetStarshipsFromCharacter, GetVehiclesFromCharacter, GetFilmsFromCharacter, GetVehicles, GetPilotNamesForVehicles, GetNextVehicles, GetPreviousVechicles,  };

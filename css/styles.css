@@ -47,3 +47,20 @@ main a:hover {
 .form-select {
     margin-left: 1rem;
 }
+
+.scrawlBG {
+    perspective: 15rem;
+    min-height: 5rem;
+}
+
+.scrawlText {
+   transform: rotateX(30deg);
+   /* animation: animateCrawl 2s ease-in; */
+}
+
+ /* @keyframes animateCrawl {
+    0% {transform: rotateX(30deg) translateY(400px)};
+    50%{animation-duration: 10s;} */
+    /* 75%{animation-duration: 15s;} */
+    /* 100% {transform: rotateX(30deg) translateY(-300pxrem)}
+}  */
