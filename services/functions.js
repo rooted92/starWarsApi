@@ -531,21 +531,21 @@ const CreateStarshipElements = async (func, inject) => {
     content.className = 'container'
 
     const btnRow = document.createElement('div');
-    btnRow.className = 'row mt-3';
+    btnRow.className = 'row mt-3 mb-5';
 
     const btnCol = document.createElement('div');
     btnCol.className = 'col-12 d-flex flex-row justify-content-between';
 
     let prevBtn = document.createElement('div');
-    prevBtn.className = 'btn btn-danger text-dark';
+    prevBtn.className = 'btn btn-danger text-dark fw-bold';
     prevBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/></svg> Previous';
 
     let nextBtn = document.createElement('button');
-    nextBtn.className = 'btn btn-danger text-dark';
+    nextBtn.className = 'btn btn-danger text-dark fw-bold';
     nextBtn.innerHTML = 'Next <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/></svg>';
 
-    // prevBtn.disabled = func.previous === null ? true : false;
-    // nextBtn.disabled = func.next === null ? true : false;
+    prevBtn.disabled = func.previous === null ? true : false;
+    nextBtn.disabled = func.next === null ? true : false;
 
 
     btnCol.append(prevBtn, nextBtn);
@@ -591,14 +591,14 @@ const CreateStarshipElements = async (func, inject) => {
         let filmArr = [];
 
         let mainCol = document.createElement('div');
-        mainCol.className = 'col-8 bg-dark bg-opacity-75 border border-danger rounded p-3 mb-4';
+        mainCol.className = 'col-12 col-md-10 col-lg-8 bg-dark bg-opacity-75 border border-danger rounded p-3 mb-4';
 
         let firstInnerRow = document.createElement('div');
         firstInnerRow.className = 'row';
         let firstColSix = document.createElement('div');
         firstColSix.className = 'col-6';
         let pName = document.createElement('p');
-        pName.className = 'fs-1 text-info';
+        pName.className = 'fs-2 text-info';
         pName.textContent = starship.name;
         let pModel = document.createElement('p');
         pModel.className = 'fw-bold';
