@@ -7,6 +7,9 @@ let prev = null;
 let nextVehicles = 'https://swapi.dev/api/vehicles/';
 let prevVehicles = null;
 
+let nextStarships = 'https://swapi.dev/api/starships/';
+let prevStarships = null;
+
 // const GetCharacters = async (character) => {
 //     const response = await fetch(`https://swapi.dev/api/people/${character}/`);
 //     const data = await response.json();
@@ -52,7 +55,7 @@ const GetVehicles = async (url) => {
 }
 
 const GetNextVehicles = async () => {
-    if(nextVehicles !== null){
+    if (nextVehicles !== null) {
         console.log('Next: ', nextVehicles)
         return await GetVehicles(nextVehicles);
     }
@@ -62,7 +65,7 @@ const GetNextVehicles = async () => {
 }
 
 const GetPreviousVechicles = async () => {
-    if(prevVehicles !== null){
+    if (prevVehicles !== null) {
         return await GetVehicles(prevVehicles);
     }
     // } else {
@@ -77,10 +80,28 @@ const GetData = async () => {
     return data;
 }
 
-const GetStarships = async () => {
-    const response = await fetch('https://swapi.dev/api/starships');
-    const data = response.json();
+const GetStarships = async (url) => {
+    const response = await fetch(url);
+    const data = await response.json();
+    prevStarships = data.previous;
+    console.log('Previous starship URL: ' + prevStarships);
+    nextStarships = data.next;
+    console.log('Next starship URL: ' + nextStarships);
     return data;
+}
+
+const nextStarshipArray = async () => {
+    console.log(prevStarships);
+    if (prevStarships !== null) {
+        return await GetStarships(prevStarships);
+    }
+}
+
+const prevStarshipArray = async () => {
+    console.log(nextStarships);
+    if (nextStarships !== null) {
+        return await GetStarships(nextStarships);
+    }
 }
 
 const GetHomeworldFromCharacter = async (url) => {
@@ -132,4 +153,4 @@ const GetFilmsFromCharacter = async url => {
 //     return data;
 // }
 
-export { GetFilmsByTitle, GetData, GetAllCharacters, NextPage, PreviousPage, GetHomeworldFromCharacter, GetStarshipsFromCharacter, GetVehiclesFromCharacter, GetFilmsFromCharacter, GetVehicles, GetPilotNamesForVehicles, GetNextVehicles, GetPreviousVechicles,  GetStarships};
+export { GetFilmsByTitle, GetData, GetAllCharacters, NextPage, PreviousPage, GetHomeworldFromCharacter, GetStarshipsFromCharacter, GetVehiclesFromCharacter, GetFilmsFromCharacter, GetVehicles, GetPilotNamesForVehicles, GetNextVehicles, GetPreviousVechicles, GetStarships, nextStarshipArray, prevStarshipArray };

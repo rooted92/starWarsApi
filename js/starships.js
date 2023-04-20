@@ -1,9 +1,10 @@
-import { GetStarships } from "../services/data.js";
+import { GetData, GetStarships } from "../services/data.js";
 import { CreateStarshipElements } from "../services/functions.js";
 
 // Global variables
 const injectHere = document.querySelector('#injectHere');
-const starshipData = await GetStarships();
+let data = await GetData();
+let starshipData = await GetStarships(data.starships);
 console.log(starshipData);
 
 // Functions

@@ -1,4 +1,4 @@
-import { GetStarshipsFromCharacter, GetHomeworldFromCharacter, GetVehiclesFromCharacter, GetFilmsFromCharacter, PreviousPage, NextPage, GetFilmsByTitle, GetNextVehicles, GetPreviousVechicles, GetPilotNamesForVehicles } from "./data.js";
+import { GetStarshipsFromCharacter, GetHomeworldFromCharacter, GetVehiclesFromCharacter, GetFilmsFromCharacter, PreviousPage, NextPage, GetFilmsByTitle, GetNextVehicles, GetPreviousVechicles, GetPilotNamesForVehicles, nextStarshipArray, prevStarshipArray } from "./data.js";
 
 // Make Character cards function/
 
@@ -528,25 +528,20 @@ const CreateSearchedVehicleElements = async (func, inject) => {
     inject.append(mainCont);
 }
 
-const CreateStarshipElements = (func, inject) => {
-    let prevStarships = null;
-    let nextStarships = 'https://swapi.dev/api/starships/?page=2';
+const CreateStarshipElements = async (func, inject) => {
+    console.log(func.previous);
 
     const GetPilots = async (url) => {
         const response = await fetch(url);
         const data = await response.json();
-        console.log(data.name);
         return data.name
     }
 
     const GetFilms = async url => {
         const response = await fetch(url);
         const data = await response.json();
-        console.log(data.title);
         return data.title
     }
-
-    
 
     const content = document.createElement('div');
     content.className = 'container'
@@ -557,13 +552,25 @@ const CreateStarshipElements = (func, inject) => {
     const btnCol = document.createElement('div');
     btnCol.className = 'col-12 d-flex flex-row justify-content-between';
 
-    const prevBtn = document.createElement('div');
+    let prevBtn = document.createElement('div');
     prevBtn.className = 'btn btn-danger text-dark';
     prevBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/></svg> Previous';
 
-    const nextBtn = document.createElement('button');
+    let nextBtn = document.createElement('button');
     nextBtn.className = 'btn btn-danger text-dark';
-    nextBtn.innerHTML =  'Next <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/></svg>';
+    nextBtn.innerHTML = 'Next <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/></svg>';
+
+    if(func.previous === null){
+        prevBtn.setAttribute('disabled', true);
+    } else {
+        prevBtn.removeAttribute('disabled');
+    }
+
+    if(func.next === null){
+        nextBtn.setAttribute('disabled', true);
+    } else {
+        nextBtn.removeAttribute('disabled');
+    }
 
     btnCol.append(prevBtn, nextBtn);
     btnRow.append(btnCol);
@@ -576,84 +583,60 @@ const CreateStarshipElements = (func, inject) => {
     func.results.map(async starship => {
         let pilotArr = [];
         let filmArr = [];
-        console.log(starship)
-    //     <div class="row justify-content-center text-white font-monospace">
-    //     <div class="col-8 bg-dark bg-opacity-75 border border-danger rounded p-3">
+
         let mainCol = document.createElement('div');
         mainCol.className = 'col-8 bg-dark bg-opacity-75 border border-danger rounded p-3 mb-4';
         
-    //         <div class="row">
         let firstInnerRow = document.createElement('div');
         firstInnerRow.className = 'row';
-    //             <div class="col-6">
         let firstColSix = document.createElement('div');
         firstColSix.className = 'col-6';
-    //                 <p class="fs-1 text-info">CR90 Corvette</p>
         let pName = document.createElement('p');
         pName.className = 'fs-1 text-info';
         pName.textContent = starship.name;
-    //                 <p class="fw-bold">Model: <span class="fw-normal text-warning">CR90 Corvette</span></p>
         let pModel = document.createElement('p');
         pModel.className = 'fw-bold';
         pModel.innerHTML = `Model: <span class="fw-normal text-warning">${starship.model}</span>`;
         
-    //                 <p class="fw-bold">MGLT: <span>60</span></p>
         let pMGLT = document.createElement('p');
         pMGLT.className = 'fw-bold';
         pMGLT.innerHTML = `MGLT: <span>${starship.MGLT}</span>`;
-    //                 <p class="fw-bold">Cargo: <span>3000000</span></p>
         let pCargo = document.createElement('p');
         pCargo.className = 'fw-bold';
         pCargo.innerHTML = `Cargo: <span>${starship.cargo_capacity}</span>`;
-    //                 <p class="fw-bold">Consumables: <span>1 year</span></p>
         let pConsumables = document.createElement('p');
         pConsumables.className = 'fw-bold';
         pConsumables.innerHTML = `Consumables: <span>${starship.consumables}</span>`;
-    //                 <p class="fw-bold">Cost in Credits: <span>3500000</span></p>
         let pCost = document.createElement('p');
         pCost.className = 'fw-bold';
         pCost.innerHTML =  `Cost in Credits: <span>${starship.cost_in_credits}</span>`;
 
         firstColSix.append(pName, pModel, pMGLT, pCargo, pConsumables, pCost);
-    //             </div>
-    //             <div class="col-6">
         let secondColSix = document.createElement('div');
         secondColSix.className = 'col-6';
-    //                 <p class="fw-bold">Manufacturer: <span class="text-danger fs-5">Corellian Engineering
         let pManufacturer = document.createElement('p');
         pManufacturer.className = 'fw-bold';
         pManufacturer.innerHTML = `Manufacturer: <span class="text-danger fs-5">${starship.manufacturer}</span>`;
-    //                         Corporation</span></p>
-    //                 <p class="fw-bold">Class: <span class="fw-normal text-success fs-5">Corvette</span></p>
         let pClass = document.createElement('div');
         pClass.className = 'fw-bold';
         pClass.innerHTML = `Class: <span class="fw-normal text-success fs-5">${starship.starship_class}</span>`;
-    //                 <p class="fw-bold">Hyper Drive Rating: <span>2.0</span></p>
         let pHyper = document.createElement('p');
         pHyper.className = 'fw-bold';
         pHyper.innerHTML = `Hyperdrive Rating: <span>${starship.hyperdrive_rating}</span>`;
-    //                 <p class="fw-bold">Length: <span>150</span></p>
         let pLength = document.createElement('p');
         pLength.className = 'fw-bold';
         pLength.innerHTML =  `Length: <span>${starship.length}</span>`;
-    //                 <p class="fw-bold">Passengers: <span>600</span></p>
         let pPassengers = document.createElement('p');
         pPassengers.className = 'fw-bold';
         pPassengers.innerHTML = `Passengers: <span>${starship.passengers}</span>`;
-    //                 <p>Max Speed: <span>950</span></p>
         let pMax = document.createElement('p');
         pMax.className = 'fw-bold';
         pMax.innerHTML = `Max Speed: <span>${starship.max_atmosphering_speed}</span>`;
-    //             </div>
-
         secondColSix.append(pManufacturer, pClass, pHyper, pLength, pPassengers, pMax);
-    //             <div class="row justify-content-center">
         let secondInnerRow = document.createElement('div');
         secondInnerRow.className = 'row justify-content-center';
-    //                 <div class="col-6">
         let thirdColSix = document.createElement('div');
-        thirdColSix.className = 'col-6'
-    //                     <p class="fw-bold">Pilots: <span class="text-primary">N/A</span></p>
+        thirdColSix.className = 'col-6';
         let pPilots = document.createElement('p');
         pPilots.className = 'fw-bold';
         starship.pilots.length === 0 ? pPilots.innerHTML = 'Pilots: <span class="text-primary">N/A</span>' : starship.pilots.map(async pilot => {
@@ -661,34 +644,35 @@ const CreateStarshipElements = (func, inject) => {
             pilotArr.push(await GetPilots(pilot));
             pPilots.innerHTML = `Pilots: <span class="text-primary">${pilotArr.join(', ')}</span>`;
         });
-    //                     <p class="fw-bold">Films: <span class="text-info">N/A</span></p>
         let pFilms = document.createElement('p');
         pFilms.className = 'fw-bold';
         starship.films.length === 0 ? pFilms.innerHTML = 'Films: <span class="text-info">N/A</span>' : starship.films.map(async film => {
             pFilms.innerHTML = '<div class="d-flex align-items-center text-warning"><strong>Loading...</strong><div class="spinner-border ms-auto text-warning" role="status" aria-hidden="true"></div></div>';
             filmArr.push(await GetFilms(film));
             pFilms.innerHTML = `Films: <span class="text-info">${filmArr.join(', ')}</span>`;
-        })
-        // pFilms.innerHTML = `Films: <span class="text-info">${starship.films.length === 0 ? 'N/A' : starship.films.map(async film => {
-        //     filmArr.push(await GetFilms(film));
-        //     console.log(filmArr);
-        //     return filmArr.join(', ');
-        // })}</span>`;
-    //                 </div>
+        });
         thirdColSix.append(pPilots, pFilms);
-    //             </div>
         secondInnerRow.append(thirdColSix);
-    //         </div>
         firstInnerRow.append(firstColSix, secondColSix, secondInnerRow);
-    //     </div>
         mainCol.append(firstInnerRow);
-    // </div>
         mainRow.append(mainCol);
     })
 
-    // here put content.append('all elements go here')
+    prevBtn.addEventListener('click', async () => {
+        inject.innerHTML = '<div class="row"><div class="col-12 d-flex flex-column align-items-center floater"><img src="../assets/images/icons8-baby-yoda-144.png" alt="Baby Yoda Loading Icon"><p class="text-white font-monospace fs-2">Loading...</p></div></div>';
+        func = await prevStarshipArray();
+        inject.innerHTML = '';
+        CreateStarshipElements(func, inject)
+    });
 
-    inject.append(content)
+    nextBtn.addEventListener('click', async () =>{
+        inject.innerHTML = '<div class="row"><div class="col-12 d-flex flex-column align-items-center floater"><img src="../assets/images/icons8-baby-yoda-144.png" alt="Baby Yoda Loading Icon"><p class="text-white font-monospace fs-2">Loading...</p></div></div>';
+        func = await nextStarshipArray();
+        inject.innerHTML = '';
+        CreateStarshipElements(func, inject);
+    });
+
+    inject.append(content);
 }
 
 const CreateWelcomeMessage = () => {
