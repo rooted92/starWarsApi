@@ -153,8 +153,6 @@ const CreateCharacterCard = async (func, inject) => {
 }
 
 const CreateVehicleElements = async (func, inject) => {
-    // let pilotArr = [];
-    // let filmArr = [];
 
     const mainCont = document.createElement('div');
     mainCont.className = 'container font-monospace';
@@ -174,17 +172,29 @@ const CreateVehicleElements = async (func, inject) => {
     const subRow = document.createElement('div');
     subRow.className = 'row d-flex justify-content-center';
 
-    if (func.previous === null) {
+    if (!func.previous) {
         // console.log('Previous in IF statement: ', func.previous)
         prevButton.setAttribute('disabled', true);
     } else {
         prevButton.removeAttribute('disabled');
+        prevButton.addEventListener('click', async function () {
+            injectHere.innerHTML = '<div class="row"><div class="col-12 d-flex flex-column align-items-center floater"><img src="../assets/images/icons8-baby-yoda-144.png" alt="Baby Yoda Loading Icon"><p class="text-white font-monospace fs-2">Loading...</p></div></div>';
+            let previous = await GetNextOrPrevData(func.previous);
+            injectHere.innerHTML = '';
+            CreateVehicleElements(previous, inject);
+        });
     }
 
-    if (func.next === null) {
+    if (!func.next) {
         nextButton.setAttribute('disabled', true);
     } else {
         nextButton.removeAttribute('disabled');
+        nextButton.addEventListener('click', async function () {
+            injectHere.innerHTML = '<div class="row"><div class="col-12 d-flex flex-column align-items-center floater"><img src="../assets/images/icons8-baby-yoda-144.png" alt="Baby Yoda Loading Icon"><p class="text-white font-monospace fs-2">Loading...</p></div></div>';
+            let next = await GetNextOrPrevData(func.next);
+            injectHere.innerHTML = '';
+            CreateVehicleElements(next, inject);
+        });
     }
 
     func.results.map(async vehicle => {
@@ -280,20 +290,6 @@ const CreateVehicleElements = async (func, inject) => {
 
     mainRow.append(firstCol, subRow);
     mainCont.append(mainRow);
-
-    nextButton.addEventListener('click', async function () {
-        injectHere.innerHTML = '<div class="row"><div class="col-12 d-flex flex-column align-items-center floater"><img src="../assets/images/icons8-baby-yoda-144.png" alt="Baby Yoda Loading Icon"><p class="text-white font-monospace fs-2">Loading...</p></div></div>';
-        func = await GetNextVehicles();
-        injectHere.innerHTML = '';
-        CreateVehicleElements(func, inject);
-    });
-
-    prevButton.addEventListener('click', async function () {
-        injectHere.innerHTML = '<div class="row"><div class="col-12 d-flex flex-column align-items-center floater"><img src="../assets/images/icons8-baby-yoda-144.png" alt="Baby Yoda Loading Icon"><p class="text-white font-monospace fs-2">Loading...</p></div></div>';
-        func = await GetPreviousVechicles();
-        injectHere.innerHTML = '';
-        CreateVehicleElements(func, inject);
-    });
 
     injectHere.append(mainCont);
 }
