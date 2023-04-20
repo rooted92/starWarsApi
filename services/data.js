@@ -91,19 +91,17 @@ const GetStarships = async (url) => {
     return data;
 }
 
-const nextStarshipArray = async () => {
-    console.log(prevStarships);
-    if (prevStarships !== null) {
-        console.log(GetStarships)
-        return await GetStarships(prevStarships);
-    }
+const GetPlanets = async url => {
+    const response = await fetch(url);
+    const data = await response.json();
+    return data;
 }
 
-const prevStarshipArray = async () => {
-    console.log(nextStarships);
-    if (nextStarships !== null) {
-        return await GetStarships(nextStarships);
-    }
+const GetPeopleNames = async url => {
+    const response = await fetch(url);
+    const data = await response.json();
+    // console.log(data);
+    return data.name;
 }
 
 const GetNextOrPrevData = async url => {
@@ -157,6 +155,13 @@ const GetFilms = async url => {
     return data.title
 }
 
+const GetAllFilms = async url => {
+    const response = await fetch(url);
+    const data = await response.json();
+    console.log(data);
+    return data;
+}
+
 // Functions for home page
 // const GetRandomCategoryItem = async (arr, inject) => {
 //     let randomIndex = Math.floor(Math.random() * arr.length);
@@ -174,4 +179,4 @@ const GetFilms = async url => {
 //     return data;
 // }
 
-export { GetFilmsByTitle, GetData, GetAllCharacters, NextPage, PreviousPage, GetHomeworldFromCharacter, GetStarshipsFromCharacter, GetVehiclesFromCharacter, GetFilmsFromCharacter, GetVehicles, GetPilotNamesForVehicles, GetNextVehicles, GetPreviousVechicles, GetStarships, nextStarshipArray, prevStarshipArray, GetPilots, GetFilms, GetNextOrPrevData };
+export { GetFilmsByTitle, GetData, GetAllCharacters, NextPage, PreviousPage, GetHomeworldFromCharacter, GetStarshipsFromCharacter, GetVehiclesFromCharacter, GetFilmsFromCharacter, GetVehicles, GetPilotNamesForVehicles, GetNextVehicles, GetPreviousVechicles, GetStarships, GetPilots, GetFilms, GetNextOrPrevData, GetPlanets, GetPeopleNames, GetAllFilms };

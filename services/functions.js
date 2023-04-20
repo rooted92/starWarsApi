@@ -1,4 +1,4 @@
-import { GetStarshipsFromCharacter, GetHomeworldFromCharacter, GetVehiclesFromCharacter, GetFilmsFromCharacter, PreviousPage, NextPage, GetFilmsByTitle, GetNextVehicles, GetPreviousVechicles, GetPilotNamesForVehicles, nextStarshipArray, prevStarshipArray, GetPilots, GetFilms, GetNextOrPrevData } from "./data.js";
+import { GetStarshipsFromCharacter, GetHomeworldFromCharacter, GetVehiclesFromCharacter, GetFilmsFromCharacter, PreviousPage, NextPage, GetFilmsByTitle, GetPilotNamesForVehicles, GetPilots, GetFilms, GetNextOrPrevData, GetPeopleNames } from "./data.js";
 
 // Make Character cards function/
 
@@ -667,8 +667,155 @@ const CreateStarshipElements = async (func, inject) => {
     inject.append(content);
 }
 
+const CreatePlanetsElements = (data, inject) => {
+
+    console.log('Data initially passed in when first called');
+    console.log(data);
+    const content = document.createElement('div');
+    content.className = 'container';
+
+    const btnRow = document.createElement('div');
+    btnRow.className = 'row my-5';
+
+    const btnCol = document.createElement('div');
+    btnCol.className = 'col-12 d-flex justify-content-between';
+
+    const nextBtn = document.createElement('button');
+    nextBtn.className = 'btn btn-danger text-dark';
+    nextBtn.innerHTML = 'Next <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/></svg>';
+
+    const prevBtn = document.createElement('button');
+    prevBtn.className = 'btn btn-danger text-dark';
+    prevBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/></svg> Previous';
+
+    // if next is falsey (null)
+    if(!data.next){
+        // give it the disabled attribute so user can no longer use it
+        nextBtn.setAttribute('disabled', true);
+    } else {
+        // otherwise remove disabled attribute and add event listener so when they click the button the next set of planets will be returned via a function that takes in the 'next' property url
+        nextBtn.removeAttribute('disabled');
+        nextBtn.addEventListener('click', async () => {
+            inject.innerHTML = '<div class="row"><div class="col-12 d-flex flex-column align-items-center floater"><img src="../assets/images/icons8-baby-yoda-144.png" alt="Baby Yoda Loading Icon"><p class="text-white font-monospace fs-2">Loading...</p></div></div>';
+            let next = await GetNextOrPrevData(data.next);
+            console.log(next.next);
+            inject.innerHTML = '';
+            CreatePlanetsElements(next, inject);
+        });
+    }
+    // same idea with previous property
+    if(!data.previous){
+        prevBtn.setAttribute('disabled', true);
+    } else {
+        prevBtn.removeAttribute('disabled');
+        prevBtn.addEventListener('click', async () => {
+            inject.innerHTML = '<div class="row"><div class="col-12 d-flex flex-column align-items-center floater"><img src="../assets/images/icons8-baby-yoda-144.png" alt="Baby Yoda Loading Icon"><p class="text-white font-monospace fs-2">Loading...</p></div></div>';
+            let previous = await GetNextOrPrevData(data.previous);
+            console.log(previous.next);
+            inject.innerHTML = '';
+            CreatePlanetsElements(previous, inject);
+        });
+    }
+
+    btnCol.append(prevBtn, nextBtn);
+    btnRow.append(btnCol);
+
+    // <div class="row justify-content-center text-white">
+        const mainRow = document.createElement('div');
+        mainRow.className = 'row justify-content-center text-white';
+
+    data.results.forEach(planet => {
+        let residentsArr = [];
+        let filmsArr = [];
+        
+        //     <div class="col-4 mx-5 mb-5 bg-dark bg-opacity-75 border border-info rounded-circle text-center font-monospace p-4">
+        const mainCol = document.createElement('div');
+        mainCol.className = 'col-6 mx-5 mb-5 bg-dark bg-opacity-75 border border-info rounded-circle text-center font-monospace p-5 overflow-scroll';
+        //         <p class="fs-3 text-success fw-bold">Tatooine</p>
+        const pName = document.createElement('p');
+        pName.className = 'fs-3 text-success fw-bold';
+        pName.textContent = `${planet.name}`;
+        //         <p>Terrain: <span class="fs-4 text-primary">Desert</span></p>
+        const pTerrain = document.createElement('p');
+        pTerrain.className = 'overflow-auto'
+        pTerrain.innerHTML = `Terrain: <span class="fs-4 text-primary m-0 text-truncate">${planet.terrain}</span>`;
+        //         <p>Climate: <span class="fs-4 text-warning">Arid</span></p>
+        const pClimate = document.createElement('p');
+        pClimate.innerHTML = `Cimate: <span class="fs-4 text-warning">${planet.climate}</span>`;
+        //         <p>Surfuace Water: <span class="text-light">1</span></p>
+        const pSurfaceWater = document.createElement('p');
+        pSurfaceWater.innerHTML = `Surface Water: <span class="text-info">${planet.surface_water}</span>`;
+        //         <p>Gravity: <span>1</span></p>
+        const pGravity = document.createElement('p');
+        pGravity.innerHTML = `Gravity: <span class="text-info">${planet.gravity}</span>`
+        //         <p>Population: <span>200000</span></p>
+        const pPopulation = document.createElement('p');
+        pPopulation.innerHTML = `Population: <span class="text-info">${planet.population}</span>`;
+        //         <p>Diameter: <span>10465</span></p>
+        const pDiameter = document.createElement('p');
+        pDiameter.innerHTML = `Diameter: <span class="text-info">${planet.diameter}</span>`;
+        //         <p>Orbital Period: 304</p>
+        const pOrbit = document.createElement('p');
+        pOrbit.innerHTML = `Orbital Period: <span class="text-info">${planet.orbital_period}</span>`;
+        //         <p>Residents: </p>
+        const pResidents = document.createElement('p');
+        pResidents.className = 'overflow-auto';
+        planet.residents.length === 0 ? pResidents.innerHTML = 'Residents: N/A' : planet.residents.forEach(async resident => {
+                pResidents.innerHTML = '<div class="d-flex align-items-center text-warning"><strong>Loading...</strong><div class="spinner-border ms-auto text-warning" role="status" aria-hidden="true"></div></div>';
+                residentsArr.push(await GetPeopleNames(resident));
+                pResidents.innerHTML = ` Residents: <span class="text-success">${residentsArr.join(', ')}</span>` ;
+            });
+        //         <p>Films: </p>
+        const pFilms = document.createElement('p');
+        pFilms.className = 'overflow-auto';
+        planet.films.length === 0 ? pFilms.innerHTML = 'Films: N/A' : planet.films.forEach(async film => {
+            pResidents.innerHTML = '<div class="d-flex align-items-center text-warning"><strong>Loading...</strong><div class="spinner-border ms-auto text-warning" role="status" aria-hidden="true"></div></div>';
+            filmsArr.push(await GetFilms(film));
+            pFilms.innerHTML = `Films: <span class="text-danger">${filmsArr.join(', ')}</span>`;
+        })
+        //     </div>
+
+        mainCol.append(pName, pTerrain, pClimate, pSurfaceWater, pGravity, pPopulation, pDiameter, pOrbit, pResidents, pFilms);
+
+        mainRow.append(mainCol);
+    });
+
+    content.append(btnRow, mainRow);
+
+    inject.append(content);
+}
+
+const CreateFilmsElements = (data, inject) => {
+    const container = document.createElement('div');
+    container.className = 'container';
+    const btnRow = document.createElement('div');
+    btnRow.className = 'row mx-5';
+    const btnCol = document.createElement('div');
+    btnCol.className = 'col-12 d-flex justify-content-between';
+
+    const nextBtn = document.createElement('button');
+    nextBtn.className = 'btn btn-danger text-dark';
+    nextBtn.innerHTML = 'Next <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/></svg>';
+
+    const prevBtn = document.createElement('button');
+    prevBtn.className = 'btn btn-danger text-dark';
+    prevBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/></svg> Previous'
+
+    const mainRow = document.createElement('div');
+    mainRow.className = 'row justify-content-center';
+
+    data.results.forEach(film => {
+        
+    });
+
+    btnCol.append(prevBtn, nextBtn);
+    btnRow.append(btnCol);
+    container.append(btnRow, mainRow);
+    inject.append(container);
+}
+
 const CreateWelcomeMessage = () => {
 
 }
 
-export { CreateCharacterCard, ActivateStarFighter, CreateVehicleElements, CreateSearchedCharacterCard, CreateSearchedVehicleElements, CreateWelcomeMessage, CreateStarshipElements };
+export { CreateCharacterCard, ActivateStarFighter, CreateVehicleElements, CreateSearchedCharacterCard, CreateSearchedVehicleElements, CreateWelcomeMessage, CreateStarshipElements, CreatePlanetsElements, CreateFilmsElements };
