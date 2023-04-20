@@ -561,9 +561,7 @@ const CreateStarshipElements = async (func, inject) => {
         nextBtn.removeAttribute('disabled');
         nextBtn.addEventListener('click', async () => {
             inject.innerHTML = '<div class="row"><div class="col-12 d-flex flex-column align-items-center floater"><img src="../assets/images/icons8-baby-yoda-144.png" alt="Baby Yoda Loading Icon"><p class="text-white font-monospace fs-2">Loading...</p></div></div>';
-            // let next = await nextStarshipArray();
-            // console.log(next);
-            // console.log('Next in nextBtn: ' + next);
+            // used recursion by invokin CreateStarshipElements() within itself, so whenver next or prev btn is clicked the elements for the next array will be created, I will use this pattern for planets and films next
             let next = await GetNextOrPrevData(func.next);
             inject.innerHTML = '';
             CreateStarshipElements(next, inject);
@@ -578,9 +576,6 @@ const CreateStarshipElements = async (func, inject) => {
         prevBtn.removeAttribute('disabled');
         prevBtn.addEventListener('click', async () => {
             inject.innerHTML = '<div class="row"><div class="col-12 d-flex flex-column align-items-center floater"><img src="../assets/images/icons8-baby-yoda-144.png" alt="Baby Yoda Loading Icon"><p class="text-white font-monospace fs-2">Loading...</p></div></div>';
-            // let previous = await prevStarshipArray();
-            // console.log(previous.previous);
-            // console.log('Previous in preBtn: ' + previous);
             let previous = await GetNextOrPrevData(func.previous);
             inject.innerHTML = '';
             CreateStarshipElements(previous, inject);
