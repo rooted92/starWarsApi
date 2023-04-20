@@ -1,4 +1,4 @@
-import { GetData, GetAllCharacters, NextPage, PreviousPage, GetHomeworldFromCharacter, GetStarshipsFromCharacter, GetVehiclesFromCharacter, GetFilmsFromCharacter } from "../services/apiCalls.js";
+import { GetData, GetAllCharacters } from "../services/data.js";
 
 import { CreateCharacterCard, ActivateStarFighter } from "../services/functions.js";
 

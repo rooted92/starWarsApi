@@ -77,6 +77,12 @@ const GetData = async () => {
     return data;
 }
 
+const GetStarships = async () => {
+    const response = await fetch('https://swapi.dev/api/starships');
+    const data = response.json();
+    return data;
+}
+
 const GetHomeworldFromCharacter = async (url) => {
     const response = await fetch(url);
     const data = await response.json();
@@ -126,4 +132,4 @@ const GetFilmsFromCharacter = async url => {
 //     return data;
 // }
 
-export { GetFilmsByTitle, GetData, GetAllCharacters, NextPage, PreviousPage, GetHomeworldFromCharacter, GetStarshipsFromCharacter, GetVehiclesFromCharacter, GetFilmsFromCharacter, GetVehicles, GetPilotNamesForVehicles, GetNextVehicles, GetPreviousVechicles,  };
+export { GetFilmsByTitle, GetData, GetAllCharacters, NextPage, PreviousPage, GetHomeworldFromCharacter, GetStarshipsFromCharacter, GetVehiclesFromCharacter, GetFilmsFromCharacter, GetVehicles, GetPilotNamesForVehicles, GetNextVehicles, GetPreviousVechicles,  GetStarships};

@@ -1,4 +1,4 @@
-import { GetVehicles, GetData } from "../services/apiCalls.js";
+import { GetVehicles, GetData } from "../services/data.js";
 import { ActivateStarFighter, CreateVehicleElements } from "../services/functions.js";
 
 // TODO - Work on pagination, make CreateEl function an imported function
