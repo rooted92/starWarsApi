@@ -1,4 +1,4 @@
-import { GetStarshipsFromCharacter, GetHomeworldFromCharacter, GetVehiclesFromCharacter, GetFilmsFromCharacter, PreviousPage, NextPage, GetFilmsByTitle, GetNextVehicles, GetPreviousVechicles, GetPilotNamesForVehicles, nextStarshipArray, prevStarshipArray } from "./data.js";
+import { GetStarshipsFromCharacter, GetHomeworldFromCharacter, GetVehiclesFromCharacter, GetFilmsFromCharacter, PreviousPage, NextPage, GetFilmsByTitle, GetNextVehicles, GetPreviousVechicles, GetPilotNamesForVehicles, nextStarshipArray, prevStarshipArray, GetPilots, GetFilms, GetNextOrPrevData } from "./data.js";
 
 // Make Character cards function/
 
@@ -530,19 +530,7 @@ const CreateSearchedVehicleElements = async (func, inject) => {
 
 const CreateStarshipElements = async (func, inject) => {
     console.log(func.previous);
-
-    const GetPilots = async (url) => {
-        const response = await fetch(url);
-        const data = await response.json();
-        return data.name
-    }
-
-    const GetFilms = async url => {
-        const response = await fetch(url);
-        const data = await response.json();
-        return data.title
-    }
-
+    console.log(func.next)
     const content = document.createElement('div');
     content.className = 'container'
 
@@ -560,33 +548,60 @@ const CreateStarshipElements = async (func, inject) => {
     nextBtn.className = 'btn btn-danger text-dark';
     nextBtn.innerHTML = 'Next <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/></svg>';
 
-    if(func.previous === null){
-        prevBtn.setAttribute('disabled', true);
-    } else {
-        prevBtn.removeAttribute('disabled');
-    }
+    // prevBtn.disabled = func.previous === null ? true : false;
+    // nextBtn.disabled = func.next === null ? true : false;
 
-    if(func.next === null){
-        nextBtn.setAttribute('disabled', true);
-    } else {
-        nextBtn.removeAttribute('disabled');
-    }
 
     btnCol.append(prevBtn, nextBtn);
     btnRow.append(btnCol);
     content.append(btnRow);
 
+    console.log(func.next)
+    if (!func.next) {
+        console.log(func.next)
+        nextBtn.setAttribute('disabled', true);
+    } else {
+        console.log(func.next);
+        nextBtn.removeAttribute('disabled');
+        nextBtn.addEventListener('click', async () => {
+            inject.innerHTML = '<div class="row"><div class="col-12 d-flex flex-column align-items-center floater"><img src="../assets/images/icons8-baby-yoda-144.png" alt="Baby Yoda Loading Icon"><p class="text-white font-monospace fs-2">Loading...</p></div></div>';
+            // let next = await nextStarshipArray();
+            // console.log(next);
+            // console.log('Next in nextBtn: ' + next);
+            let next = await GetNextOrPrevData(func.next);
+            inject.innerHTML = '';
+            CreateStarshipElements(next, inject);
+        });
+    }
+
+    if (!func.previous) {
+        console.log(func.previous);
+        prevBtn.setAttribute('disabled', true);
+    } else {
+        console.log(func.previous);
+        prevBtn.removeAttribute('disabled');
+        prevBtn.addEventListener('click', async () => {
+            inject.innerHTML = '<div class="row"><div class="col-12 d-flex flex-column align-items-center floater"><img src="../assets/images/icons8-baby-yoda-144.png" alt="Baby Yoda Loading Icon"><p class="text-white font-monospace fs-2">Loading...</p></div></div>';
+            // let previous = await prevStarshipArray();
+            // console.log(previous.previous);
+            // console.log('Previous in preBtn: ' + previous);
+            let previous = await GetNextOrPrevData(func.previous);
+            inject.innerHTML = '';
+            CreateStarshipElements(previous, inject);
+        });
+    }
+
     const mainRow = document.createElement('div');
     mainRow.className = 'row justify-content-center text-white font-monospace';
     content.append(mainRow);
 
-    func.results.map(async starship => {
+    func.results.forEach(async starship => {
         let pilotArr = [];
         let filmArr = [];
 
         let mainCol = document.createElement('div');
         mainCol.className = 'col-8 bg-dark bg-opacity-75 border border-danger rounded p-3 mb-4';
-        
+
         let firstInnerRow = document.createElement('div');
         firstInnerRow.className = 'row';
         let firstColSix = document.createElement('div');
@@ -597,7 +612,7 @@ const CreateStarshipElements = async (func, inject) => {
         let pModel = document.createElement('p');
         pModel.className = 'fw-bold';
         pModel.innerHTML = `Model: <span class="fw-normal text-warning">${starship.model}</span>`;
-        
+
         let pMGLT = document.createElement('p');
         pMGLT.className = 'fw-bold';
         pMGLT.innerHTML = `MGLT: <span>${starship.MGLT}</span>`;
@@ -609,7 +624,7 @@ const CreateStarshipElements = async (func, inject) => {
         pConsumables.innerHTML = `Consumables: <span>${starship.consumables}</span>`;
         let pCost = document.createElement('p');
         pCost.className = 'fw-bold';
-        pCost.innerHTML =  `Cost in Credits: <span>${starship.cost_in_credits}</span>`;
+        pCost.innerHTML = `Cost in Credits: <span>${starship.cost_in_credits}</span>`;
 
         firstColSix.append(pName, pModel, pMGLT, pCargo, pConsumables, pCost);
         let secondColSix = document.createElement('div');
@@ -625,7 +640,7 @@ const CreateStarshipElements = async (func, inject) => {
         pHyper.innerHTML = `Hyperdrive Rating: <span>${starship.hyperdrive_rating}</span>`;
         let pLength = document.createElement('p');
         pLength.className = 'fw-bold';
-        pLength.innerHTML =  `Length: <span>${starship.length}</span>`;
+        pLength.innerHTML = `Length: <span>${starship.length}</span>`;
         let pPassengers = document.createElement('p');
         pPassengers.className = 'fw-bold';
         pPassengers.innerHTML = `Passengers: <span>${starship.passengers}</span>`;
@@ -639,14 +654,14 @@ const CreateStarshipElements = async (func, inject) => {
         thirdColSix.className = 'col-6';
         let pPilots = document.createElement('p');
         pPilots.className = 'fw-bold';
-        starship.pilots.length === 0 ? pPilots.innerHTML = 'Pilots: <span class="text-primary">N/A</span>' : starship.pilots.map(async pilot => {
+        starship.pilots.length === 0 ? pPilots.innerHTML = 'Pilots: <span class="text-primary">N/A</span>' : starship.pilots.forEach(async pilot => {
             pPilots.innerHTML = '<div class="d-flex align-items-center text-warning"><strong>Loading...</strong><div class="spinner-border ms-auto text-warning" role="status" aria-hidden="true"></div></div>';
             pilotArr.push(await GetPilots(pilot));
             pPilots.innerHTML = `Pilots: <span class="text-primary">${pilotArr.join(', ')}</span>`;
         });
         let pFilms = document.createElement('p');
         pFilms.className = 'fw-bold';
-        starship.films.length === 0 ? pFilms.innerHTML = 'Films: <span class="text-info">N/A</span>' : starship.films.map(async film => {
+        starship.films.length === 0 ? pFilms.innerHTML = 'Films: <span class="text-info">N/A</span>' : starship.films.forEach(async film => {
             pFilms.innerHTML = '<div class="d-flex align-items-center text-warning"><strong>Loading...</strong><div class="spinner-border ms-auto text-warning" role="status" aria-hidden="true"></div></div>';
             filmArr.push(await GetFilms(film));
             pFilms.innerHTML = `Films: <span class="text-info">${filmArr.join(', ')}</span>`;
@@ -656,27 +671,13 @@ const CreateStarshipElements = async (func, inject) => {
         firstInnerRow.append(firstColSix, secondColSix, secondInnerRow);
         mainCol.append(firstInnerRow);
         mainRow.append(mainCol);
-    })
-
-    prevBtn.addEventListener('click', async () => {
-        inject.innerHTML = '<div class="row"><div class="col-12 d-flex flex-column align-items-center floater"><img src="../assets/images/icons8-baby-yoda-144.png" alt="Baby Yoda Loading Icon"><p class="text-white font-monospace fs-2">Loading...</p></div></div>';
-        func = await prevStarshipArray();
-        inject.innerHTML = '';
-        CreateStarshipElements(func, inject)
-    });
-
-    nextBtn.addEventListener('click', async () =>{
-        inject.innerHTML = '<div class="row"><div class="col-12 d-flex flex-column align-items-center floater"><img src="../assets/images/icons8-baby-yoda-144.png" alt="Baby Yoda Loading Icon"><p class="text-white font-monospace fs-2">Loading...</p></div></div>';
-        func = await nextStarshipArray();
-        inject.innerHTML = '';
-        CreateStarshipElements(func, inject);
     });
 
     inject.append(content);
 }
 
 const CreateWelcomeMessage = () => {
-    
+
 }
 
 export { CreateCharacterCard, ActivateStarFighter, CreateVehicleElements, CreateSearchedCharacterCard, CreateSearchedVehicleElements, CreateWelcomeMessage, CreateStarshipElements };

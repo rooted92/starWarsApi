@@ -77,6 +77,7 @@ const GetPreviousVechicles = async () => {
 const GetData = async () => {
     const response = await fetch('https://swapi.dev/api/');
     const data = await response.json();
+    console.log(data);
     return data;
 }
 
@@ -93,6 +94,7 @@ const GetStarships = async (url) => {
 const nextStarshipArray = async () => {
     console.log(prevStarships);
     if (prevStarships !== null) {
+        console.log(GetStarships)
         return await GetStarships(prevStarships);
     }
 }
@@ -102,6 +104,13 @@ const prevStarshipArray = async () => {
     if (nextStarships !== null) {
         return await GetStarships(nextStarships);
     }
+}
+
+const GetNextOrPrevData = async url => {
+    const response = await fetch(url);
+    const data = await response.json();
+    console.log(data);
+    return data;
 }
 
 const GetHomeworldFromCharacter = async (url) => {
@@ -136,6 +145,18 @@ const GetFilmsFromCharacter = async url => {
     return data;
 }
 
+const GetPilots = async (url) => {
+    const response = await fetch(url);
+    const data = await response.json();
+    return data.name
+}
+
+const GetFilms = async url => {
+    const response = await fetch(url);
+    const data = await response.json();
+    return data.title
+}
+
 // Functions for home page
 // const GetRandomCategoryItem = async (arr, inject) => {
 //     let randomIndex = Math.floor(Math.random() * arr.length);
@@ -153,4 +174,4 @@ const GetFilmsFromCharacter = async url => {
 //     return data;
 // }
 
-export { GetFilmsByTitle, GetData, GetAllCharacters, NextPage, PreviousPage, GetHomeworldFromCharacter, GetStarshipsFromCharacter, GetVehiclesFromCharacter, GetFilmsFromCharacter, GetVehicles, GetPilotNamesForVehicles, GetNextVehicles, GetPreviousVechicles, GetStarships, nextStarshipArray, prevStarshipArray };
+export { GetFilmsByTitle, GetData, GetAllCharacters, NextPage, PreviousPage, GetHomeworldFromCharacter, GetStarshipsFromCharacter, GetVehiclesFromCharacter, GetFilmsFromCharacter, GetVehicles, GetPilotNamesForVehicles, GetNextVehicles, GetPreviousVechicles, GetStarships, nextStarshipArray, prevStarshipArray, GetPilots, GetFilms, GetNextOrPrevData };
