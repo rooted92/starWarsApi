@@ -10,13 +10,7 @@ let prevVehicles = null;
 let nextStarships = 'https://swapi.dev/api/starships/';
 let prevStarships = null;
 
-// const GetCharacters = async (character) => {
-//     const response = await fetch(`https://swapi.dev/api/people/${character}/`);
-//     const data = await response.json();
-//     return data;
-// }
-
-
+// Functions
 const GetAllCharacters = async (url) => {
     const response = await fetch(url);
     const data = await response.json();
@@ -65,18 +59,12 @@ const GetNextVehicles = async () => {
         console.log('Next: ', nextVehicles)
         return await GetVehicles(nextVehicles);
     }
-    // } else {
-    //     return console.error('Could not fetch data, check URL is valid.');
-    // }
 }
 
 const GetPreviousVechicles = async () => {
     if (prevVehicles !== null) {
         return await GetVehicles(prevVehicles);
     }
-    // } else {
-    //     return console.error('Could not fetch data, check URL is valid.');
-    // }
 }
 
 
@@ -158,7 +146,6 @@ const GetPilotNamesForVehicles = async url => {
     // console.log(data);
     return data.name;
 }
-// GetPilotNamesForVehicles("https://swapi.dev/api/people/13/");
 
 const GetFilmsFromCharacter = async url => {
     const response = await fetch(url);
@@ -184,22 +171,5 @@ const GetAllFilms = async url => {
     console.log(data);
     return data;
 }
-
-// Functions for home page
-// const GetRandomCategoryItem = async (arr, inject) => {
-//     let randomIndex = Math.floor(Math.random() * arr.length);
-//     console.log(arr[randomIndex]);
-//     const response = await fetch(`https://swapi.dev/api/${arr[randomIndex]}/`);
-//     const data = await response.json();
-//     console.log(data.results);
-//     if(arr[randomIndex] === 'people'){
-//         console.log('call the function to create people elments');
-//         await CreateCharacterCard(data, inject);
-//     } else if( arr[randomIndex] === 'vehicles'){
-//         console.log('Call the function to create vehicle elements');
-//         await CreateVehicleElements(data, inject);
-//     }
-//     return data;
-// }
 
 export { GetFilmsByTitle, GetData, GetAllCharacters, NextPage, PreviousPage, GetHomeworldFromCharacter, GetStarshipsFromCharacter, GetVehiclesFromCharacter, GetFilmsFromCharacter, GetVehicles, GetPilotNamesForVehicles, GetNextVehicles, GetPreviousVechicles, GetStarships, GetPilots, GetFilms, GetNextOrPrevData, GetPlanets, GetPeopleNames, GetAllFilms, GetPlanetsByName, GetSpeciesByName, GetStarshipsByName, GetVehiclesByName };

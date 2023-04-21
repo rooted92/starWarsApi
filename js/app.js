@@ -21,13 +21,26 @@ const SearchCategory = async (category = 'people', search) => {
 }
 
 // await GetRandomCategoryItem(categoriesArr, injectHere);
+if(selectInput.value === 'Search by category'){
+    console.log(selectInput.value);
+    userInput.setAttribute('disabled', true);
+}
 
 // Event Listeners
 selectInput.addEventListener('click', function () {
     // console.log(selectInput.value);
+    if(selectInput.value === 'Search by category'){
+        console.log(selectInput.value);
+        userInput.setAttribute('disabled', true);
+    }
+    else if (selectInput.value === 'people' || 'vehicles' || 'starships' || 'planets' || 'films') {
+        userInput.removeAttribute('disabled');
+    }
     categoryPicked = selectInput.value;
     console.log('Category picked: ', categoryPicked);
 })
+
+
 
 userInput.addEventListener('change', function () {
     // console.log(userInput.value);
@@ -73,4 +86,6 @@ searchBtn.addEventListener('click', async function () {
 
 starFighter.addEventListener('click', function () {
     ActivateStarFighter(starFighter);
-})
+});
+
+// On page load set attribute of disabled to true on search bar (user must choose category first before they can search)
