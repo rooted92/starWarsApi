@@ -64,3 +64,17 @@ main a:hover {
     /* 75%{animation-duration: 15s;} */
     /* 100% {transform: rotateX(30deg) translateY(-300pxrem)}
 }  */
+
+#userInput {
+    min-width: 10rem !important;
+}
+
+#userInput::placeholder {
+    color: yellow;
+}
+
+/* CSS for Films page */
+
+.purpleText {
+    color: plum !important;
+}

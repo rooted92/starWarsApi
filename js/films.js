@@ -13,6 +13,10 @@ let data = await GetData();
 console.log(data.films)
 let films = await GetAllFilms(data.films);
 
-// injectHere.innerHTML = '';
+injectHere.innerHTML = '';
 
+// Functions
 CreateFilmsElements(films, injectHere);
+
+// Event Listeners
+starFighter.addEventListener('click', () => ActivateStarFighter(starFighter));

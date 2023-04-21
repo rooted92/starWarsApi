@@ -54,6 +54,12 @@ const GetVehicles = async (url) => {
     return data;
 }
 
+const GetVehiclesByName = async url => {
+    const response = await fetch(url);
+    const data = await response.json();
+    return data.name;
+}
+
 const GetNextVehicles = async () => {
     if (nextVehicles !== null) {
         console.log('Next: ', nextVehicles)
@@ -77,7 +83,6 @@ const GetPreviousVechicles = async () => {
 const GetData = async () => {
     const response = await fetch('https://swapi.dev/api/');
     const data = await response.json();
-    console.log(data);
     return data;
 }
 
@@ -91,16 +96,34 @@ const GetStarships = async (url) => {
     return data;
 }
 
+const GetStarshipsByName = async url => {
+    const response = await fetch(url);
+    const data = await response.json();
+    return data.name;
+}
+
 const GetPlanets = async url => {
     const response = await fetch(url);
     const data = await response.json();
     return data;
 }
 
+const GetPlanetsByName = async url => {
+    const response = await fetch(url);
+    const data = await response.json();
+    return data.name;
+}
+
 const GetPeopleNames = async url => {
     const response = await fetch(url);
     const data = await response.json();
     // console.log(data);
+    return data.name;
+}
+
+const GetSpeciesByName = async url => {
+    const response = await fetch(url);
+    const data = await response.json();
     return data.name;
 }
 
@@ -179,4 +202,4 @@ const GetAllFilms = async url => {
 //     return data;
 // }
 
-export { GetFilmsByTitle, GetData, GetAllCharacters, NextPage, PreviousPage, GetHomeworldFromCharacter, GetStarshipsFromCharacter, GetVehiclesFromCharacter, GetFilmsFromCharacter, GetVehicles, GetPilotNamesForVehicles, GetNextVehicles, GetPreviousVechicles, GetStarships, GetPilots, GetFilms, GetNextOrPrevData, GetPlanets, GetPeopleNames, GetAllFilms };
+export { GetFilmsByTitle, GetData, GetAllCharacters, NextPage, PreviousPage, GetHomeworldFromCharacter, GetStarshipsFromCharacter, GetVehiclesFromCharacter, GetFilmsFromCharacter, GetVehicles, GetPilotNamesForVehicles, GetNextVehicles, GetPreviousVechicles, GetStarships, GetPilots, GetFilms, GetNextOrPrevData, GetPlanets, GetPeopleNames, GetAllFilms, GetPlanetsByName, GetSpeciesByName, GetStarshipsByName, GetVehiclesByName };

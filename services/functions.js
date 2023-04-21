@@ -1,4 +1,4 @@
-import { GetStarshipsFromCharacter, GetHomeworldFromCharacter, GetVehiclesFromCharacter, GetFilmsFromCharacter, PreviousPage, NextPage, GetFilmsByTitle, GetPilotNamesForVehicles, GetPilots, GetFilms, GetNextOrPrevData, GetPeopleNames } from "./data.js";
+import { GetStarshipsFromCharacter, GetHomeworldFromCharacter, GetVehiclesFromCharacter, GetFilmsFromCharacter, PreviousPage, NextPage, GetFilmsByTitle, GetPilotNamesForVehicles, GetPilots, GetFilms, GetNextOrPrevData, GetPeopleNames, GetSpeciesByName, GetVehiclesByName, GetPlanetsByName, GetStarshipsByName } from "./data.js";
 
 // Make Character cards function/
 
@@ -698,7 +698,6 @@ const CreatePlanetsElements = (data, inject) => {
         nextBtn.addEventListener('click', async () => {
             inject.innerHTML = '<div class="row"><div class="col-12 d-flex flex-column align-items-center floater"><img src="../assets/images/icons8-baby-yoda-144.png" alt="Baby Yoda Loading Icon"><p class="text-white font-monospace fs-2">Loading...</p></div></div>';
             let next = await GetNextOrPrevData(data.next);
-            console.log(next.next);
             inject.innerHTML = '';
             CreatePlanetsElements(next, inject);
         });
@@ -711,7 +710,6 @@ const CreatePlanetsElements = (data, inject) => {
         prevBtn.addEventListener('click', async () => {
             inject.innerHTML = '<div class="row"><div class="col-12 d-flex flex-column align-items-center floater"><img src="../assets/images/icons8-baby-yoda-144.png" alt="Baby Yoda Loading Icon"><p class="text-white font-monospace fs-2">Loading...</p></div></div>';
             let previous = await GetNextOrPrevData(data.previous);
-            console.log(previous.next);
             inject.innerHTML = '';
             CreatePlanetsElements(previous, inject);
         });
@@ -788,29 +786,186 @@ const CreatePlanetsElements = (data, inject) => {
 const CreateFilmsElements = (data, inject) => {
     const container = document.createElement('div');
     container.className = 'container';
-    const btnRow = document.createElement('div');
-    btnRow.className = 'row mx-5';
-    const btnCol = document.createElement('div');
-    btnCol.className = 'col-12 d-flex justify-content-between';
+    // const btnRow = document.createElement('div');
+    // btnRow.className = 'row mx-5';
+    // const btnCol = document.createElement('div');
+    // btnCol.className = 'col-12 d-flex justify-content-between';
 
-    const nextBtn = document.createElement('button');
-    nextBtn.className = 'btn btn-danger text-dark';
-    nextBtn.innerHTML = 'Next <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/></svg>';
+    // const nextBtn = document.createElement('button');
+    // nextBtn.className = 'btn btn-danger text-dark';
+    // nextBtn.innerHTML = 'Next <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/></svg>';
 
-    const prevBtn = document.createElement('button');
-    prevBtn.className = 'btn btn-danger text-dark';
-    prevBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/></svg> Previous'
+    // const prevBtn = document.createElement('button');
+    // prevBtn.className = 'btn btn-danger text-dark';
+    // prevBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/></svg> Previous'
 
     const mainRow = document.createElement('div');
     mainRow.className = 'row justify-content-center';
 
     data.results.forEach(film => {
-        
+        let planetsArr = [];
+        let speciesArr = [];
+        let vehiclesArr = [];
+        let starshipsArr = [];
+        // <div class="col-10 border border-2 border-success rounded bg-dark bg-opacity-50 text-white p-4">
+        const mainCol = document.createElement('div');
+        mainCol.className = 'col-10 mb-5 border border-2 border-success rounded bg-dark bg-opacity-50 text-white p-4';
+        //             <div class="row">
+        const mainInfoRow = document.createElement('div');
+        mainInfoRow.className = 'row';
+        //                 <div class="col-4 d-flex flex-column align-items-center">
+        const firstInfoCol = document.createElement('div');
+        firstInfoCol.className = 'col-4 d-flex flex-column align-items-center';
+        //                     <p class="fs-1 fw-bold text-danger m-0">Title</p>
+        const pTitle = document.createElement('p');
+        pTitle.className = 'fs-2 text-center fw-bold text-danger m-0';
+        pTitle.textContent = `${film.title}`;
+        //                     <p class="fw-bold fs-3">Episode: <span class="text-danger text-decoration-underline">4</span></p>
+        const pEpisode = document.createElement('p');
+        pEpisode.className = 'fw-bold fs-3';
+        pEpisode.innerHTML = `Episode: <span class="text-danger text-decoration-underline">${film.episode_id}</span>`;
+        //                 </div>
+        firstInfoCol.append(pTitle, pEpisode)
+        //                 <div class="col-4">
+        const secondInfoCol = document.createElement('div');
+        secondInfoCol.className = 'col-4';
+        //                     <p class="fw-bold fs-4">Director: <span class="text-primary fw-normal">George Lucas</span></p>
+        const pDirector = document.createElement('p');
+        pDirector.className = 'fw-bold fs-4';
+        pDirector.innerHTML = `Director: <span class="text-primary fw-normal">${film.director}</span>`;
+        //                     <p class="fw-bold fs-5">Producer(s): <span class="text-info fw-normal">Rick McCallum</span></p>
+        const pProducer = document.createElement('p');
+        pProducer.className = 'fw-bold fs-5';
+        pProducer.innerHTML = `Producer(s): <span class="text-info fw-normal">${film.producer}</span>`;
+        //                 </div>
+        secondInfoCol.append(pDirector, pProducer);
+        //                 <div class="col-4">
+        const thirdInfoCol = document.createElement('div');
+        thirdInfoCol.className = 'col-4';
+        //                     <p class="fw-bold fs-3">Release Date: <span class="text-warning fw-normal">2/24/1975</span></p>
+        const pDate = document.createElement('p');
+        pDate.className = 'fw-bold fs-3';
+        pDate.innerHTML = `Release Date: <span class="text-warning fw-normal">${film.release_date}</span>`;
+        //                 </div>
+        thirdInfoCol.append(pDate);
+        //             </div>
+        mainInfoRow.append(firstInfoCol, secondInfoCol, thirdInfoCol);
+        //             <div class="row">
+        const openCrawlRow = document.createElement('div');
+        openCrawlRow.className = 'row';
+        //                 <div class="col-12 d-flex flex-column align-items-center">
+        const crawlCol = document.createElement('div');
+        crawlCol.className = 'col-12 d-flex flex-column align-items-center';
+        //                     <p class="fw-bold fs-3 text-warning" >Opening Scrawl:</p>
+        const pCrawlTitle = document.createElement('p');
+        pCrawlTitle.className = 'fw-bold fs-3 text-warning';
+        pCrawlTitle.textContent = 'Opening Crawl:'
+        //                     <p class="text-center text-bg-dark text-warning fw-bold w-50">Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis enim obcaecati aut deleniti ea alias necessitatibus repudiandae, at similique? Maxime, delectus repellat harum fugit, sit numquam aliquid dolorum nobis asperiores explicabo impedit, rem doloribus hic alias sunt. Nihil, neque praesentium magni vel exercitationem quasi accusamus, delectus soluta nostrum culpa sed!</p>
+        const pCrawlText = document.createElement('p');
+        pCrawlText.className = 'text-center text-bg-dark text-warning fw-bold w-50';
+        pCrawlText.textContent = `${film.opening_crawl}`;
+        //                 </div>
+        crawlCol.append(pCrawlTitle, pCrawlText);
+        //             </div>
+        openCrawlRow.append(crawlCol);
+        //             <div class="row">
+        const listsRow = document.createElement('div');
+        listsRow.className = 'row';
+        //                 <div class="col-3">
+        const planetsCol = document.createElement('div');
+        planetsCol.className = 'col-3';
+        //                     <p class="text-center">Planets</p>
+        const pPlanetTitle = document.createElement('p');
+        pPlanetTitle.className = 'text-center';
+        pPlanetTitle.textContent = 'Planets'
+        //                     <hr>
+        const firstHrPlanet = document.createElement('hr');
+        //                     <p class="purpleText bg-dark p-3 fst-italic text-wrap"> Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis, nisi!</p>
+        const pPlanetsList = document.createElement('p');
+        pPlanetsList.className = 'purpleText bg-dark p-3 fst-italic text-wrap';
+        film.planets.length === 0 ? pPlanetsList.textContent = 'N/A' : film.planets.forEach(async planet => {
+            pPlanetsList.textContent = 'Loading...';
+            planetsArr.push(await GetPlanetsByName(planet));
+            pPlanetsList.textContent = `${planetsArr.join(', ')}`;
+        });
+        //                     <hr>
+        const secondHrPlanet = document.createElement('hr');
+        //                 </div>
+        planetsCol.append(pPlanetTitle, firstHrPlanet, pPlanetsList, secondHrPlanet);
+        //                 <div class="col-3">
+        const speciesCol = document.createElement('div');
+        speciesCol.className = 'col-3';
+        //                     <p class="text-center">Species</p>
+        const pSpeciesTitle = document.createElement('p');
+        pSpeciesTitle.className = 'text-center';
+        pSpeciesTitle.textContent = 'Species'
+        //                     <hr>
+        const firstHrSpecies = document.createElement('hr');
+        //                     <p class="purpleText bg-dark p-3 fst-italic text-wrap"> Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis, nisi!</p>
+        const pSpeciesList = document.createElement('p');
+        pSpeciesList.className = 'purpleText bg-dark p-3 fst-italic text-wrap';
+        film.species.length === 0 ? pSpeciesList.innerHTML = 'N/A' : film.species.forEach(async species => {
+            pSpeciesList.innerHTML = 'Loading...';
+            speciesArr.push(await GetSpeciesByName(species));
+            pSpeciesList.innerHTML = `${speciesArr.join(', ')}`;
+        });
+        //                     <hr>
+        const secondHrSpecies = document.createElement('hr');
+        //                 </div>
+        speciesCol.append(pSpeciesTitle, firstHrSpecies, pSpeciesList, secondHrSpecies);
+        //                 <div class="col-3">
+        const starshipsCol = document.createElement('div');
+        starshipsCol.className = 'col-3';
+        //                     <p class="text-center">Starships</p>
+        const pStarshipTitle = document.createElement('p');
+        pStarshipTitle.className = 'text-center';
+        pStarshipTitle.textContent = 'Starships';
+        //                     <hr>
+        const firstHrStarship = document.createElement('hr');
+        //                     <p class="purpleText bg-dark p-3 fst-italic text-wrap"> Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis, nisi!</p>
+        const pStarshipList = document.createElement('p');
+        pStarshipList.className = 'purpleText bg-dark p-3 fst-italic text-wrap';
+        film.starships.length === 0 ? pStarshipList.textContent = 'N/A' : film.starships.forEach(async starship => {
+            pStarshipList.textContent = 'Loading...';
+            starshipsArr.push(await GetStarshipsByName(starship));
+            pStarshipList.textContent = `${starshipsArr.join(', ')}`;
+        });
+        //                     <hr>
+        const secondHrStarship = document.createElement('hr');
+        //                 </div>
+        starshipsCol.append(pStarshipTitle, firstHrStarship, pStarshipList, secondHrStarship);
+        //                 <div class="col-3">
+        const vehiclesCol = document.createElement('div');
+        vehiclesCol.className = 'col-3';
+        //                     <p class="text-center">Vehicles</p>
+        const pVehiclesTitle = document.createElement('p');
+        pVehiclesTitle.className = 'text-center';
+        pVehiclesTitle.textContent = 'Vehicles';
+        //                     <hr>
+        const firstHrVehicles = document.createElement('hr');
+        //                     <p class="purpleText bg-dark p-3 fst-italic text-wrap"> Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis, nisi!</p>
+        const pVehiclesList = document.createElement('p');
+        pVehiclesList.className = 'purpleText bg-dark p-3 fst-italic text-wrap';
+        film.vehicles.length === 0 ? pVehiclesList.textContent = 'N/A' : film.vehicles.forEach(async vehicle => {
+            pVehiclesList.textContent = 'Loading...';
+            vehiclesArr.push(await GetVehiclesByName(vehicle));
+            pVehiclesList.textContent = `${vehiclesArr.join(', ')}`;
+        });
+        //                     <hr>
+        const secondHrVehicles = document.createElement('hr');
+        //                 </div>
+        vehiclesCol.append(pVehiclesTitle, firstHrVehicles, pVehiclesList, secondHrVehicles);
+        //             </div>
+        listsRow.append(planetsCol, speciesCol, starshipsCol, vehiclesCol);
+        //         </div>
+
+        mainCol.append(mainInfoRow, openCrawlRow, listsRow);
+        mainRow.append(mainCol);
     });
 
-    btnCol.append(prevBtn, nextBtn);
-    btnRow.append(btnCol);
-    container.append(btnRow, mainRow);
+    // btnCol.append(prevBtn, nextBtn);
+    // btnRow.append(btnCol);
+    container.append(mainRow);
     inject.append(container);
 }
 
