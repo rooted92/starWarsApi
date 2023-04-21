@@ -561,7 +561,7 @@ const CreateStarshipElements = async (func, inject) => {
         nextBtn.removeAttribute('disabled');
         nextBtn.addEventListener('click', async () => {
             inject.innerHTML = '<div class="row"><div class="col-12 d-flex flex-column align-items-center floater"><img src="../assets/images/icons8-baby-yoda-144.png" alt="Baby Yoda Loading Icon"><p class="text-white font-monospace fs-2">Loading...</p></div></div>';
-            // used recursion by invokin CreateStarshipElements() within itself, so whenver next or prev btn is clicked the elements for the next array will be created, I will use this pattern for planets and films next
+            // used recursion by invoking CreateStarshipElements() within itself, so whenver next or prev btn is clicked the elements for the next array will be created, I will use this pattern for planets and films next
             let next = await GetNextOrPrevData(func.next);
             inject.innerHTML = '';
             CreateStarshipElements(next, inject);
@@ -667,6 +667,93 @@ const CreateStarshipElements = async (func, inject) => {
     inject.append(content);
 }
 
+const CreateSearchedStarshipElements = (data, inject) => {
+    const container = document.createElement('div');
+    container.className = 'container';
+    const mainRow = document.createElement('div');
+    mainRow.className = 'row justify-content-center text-white font-monospace';
+
+    data.results.forEach(async starship => {
+        let pilotArr = [];
+        let filmArr = [];
+
+        let mainCol = document.createElement('div');
+        mainCol.className = 'col-12 col-md-10 col-lg-8 bg-dark bg-opacity-75 border border-danger rounded p-3 mb-4';
+
+        let firstInnerRow = document.createElement('div');
+        firstInnerRow.className = 'row';
+        let firstColSix = document.createElement('div');
+        firstColSix.className = 'col-6';
+        let pName = document.createElement('p');
+        pName.className = 'fs-2 text-info';
+        pName.textContent = starship.name;
+        let pModel = document.createElement('p');
+        pModel.className = 'fw-bold';
+        pModel.innerHTML = `Model: <span class="fw-normal text-warning">${starship.model}</span>`;
+
+        let pMGLT = document.createElement('p');
+        pMGLT.className = 'fw-bold';
+        pMGLT.innerHTML = `MGLT: <span>${starship.MGLT}</span>`;
+        let pCargo = document.createElement('p');
+        pCargo.className = 'fw-bold';
+        pCargo.innerHTML = `Cargo: <span>${starship.cargo_capacity}</span>`;
+        let pConsumables = document.createElement('p');
+        pConsumables.className = 'fw-bold';
+        pConsumables.innerHTML = `Consumables: <span>${starship.consumables}</span>`;
+        let pCost = document.createElement('p');
+        pCost.className = 'fw-bold';
+        pCost.innerHTML = `Cost in Credits: <span>${starship.cost_in_credits}</span>`;
+
+        firstColSix.append(pName, pModel, pMGLT, pCargo, pConsumables, pCost);
+        let secondColSix = document.createElement('div');
+        secondColSix.className = 'col-6';
+        let pManufacturer = document.createElement('p');
+        pManufacturer.className = 'fw-bold';
+        pManufacturer.innerHTML = `Manufacturer: <span class="text-danger fs-5">${starship.manufacturer}</span>`;
+        let pClass = document.createElement('div');
+        pClass.className = 'fw-bold';
+        pClass.innerHTML = `Class: <span class="fw-normal text-success fs-5">${starship.starship_class}</span>`;
+        let pHyper = document.createElement('p');
+        pHyper.className = 'fw-bold';
+        pHyper.innerHTML = `Hyperdrive Rating: <span>${starship.hyperdrive_rating}</span>`;
+        let pLength = document.createElement('p');
+        pLength.className = 'fw-bold';
+        pLength.innerHTML = `Length: <span>${starship.length}</span>`;
+        let pPassengers = document.createElement('p');
+        pPassengers.className = 'fw-bold';
+        pPassengers.innerHTML = `Passengers: <span>${starship.passengers}</span>`;
+        let pMax = document.createElement('p');
+        pMax.className = 'fw-bold';
+        pMax.innerHTML = `Max Speed: <span>${starship.max_atmosphering_speed}</span>`;
+        secondColSix.append(pManufacturer, pClass, pHyper, pLength, pPassengers, pMax);
+        let secondInnerRow = document.createElement('div');
+        secondInnerRow.className = 'row justify-content-center';
+        let thirdColSix = document.createElement('div');
+        thirdColSix.className = 'col-6';
+        let pPilots = document.createElement('p');
+        pPilots.className = 'fw-bold';
+        starship.pilots.length === 0 ? pPilots.innerHTML = 'Pilots: <span class="text-primary">N/A</span>' : starship.pilots.forEach(async pilot => {
+            pPilots.innerHTML = '<div class="d-flex align-items-center text-warning"><strong>Loading...</strong><div class="spinner-border ms-auto text-warning" role="status" aria-hidden="true"></div></div>';
+            pilotArr.push(await GetPilots(pilot));
+            pPilots.innerHTML = `Pilots: <span class="text-primary">${pilotArr.join(', ')}</span>`;
+        });
+        let pFilms = document.createElement('p');
+        pFilms.className = 'fw-bold';
+        starship.films.length === 0 ? pFilms.innerHTML = 'Films: <span class="text-info">N/A</span>' : starship.films.forEach(async film => {
+            pFilms.innerHTML = '<div class="d-flex align-items-center text-warning"><strong>Loading...</strong><div class="spinner-border ms-auto text-warning" role="status" aria-hidden="true"></div></div>';
+            filmArr.push(await GetFilms(film));
+            pFilms.innerHTML = `Films: <span class="text-info">${filmArr.join(', ')}</span>`;
+        });
+        thirdColSix.append(pPilots, pFilms);
+        secondInnerRow.append(thirdColSix);
+        firstInnerRow.append(firstColSix, secondColSix, secondInnerRow);
+        mainCol.append(firstInnerRow);
+        mainRow.append(mainCol);
+    });
+    container.append(mainRow)
+    inject.append(container);
+}
+
 const CreatePlanetsElements = (data, inject) => {
 
     console.log('Data initially passed in when first called');
@@ -689,7 +776,7 @@ const CreatePlanetsElements = (data, inject) => {
     prevBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/></svg> Previous';
 
     // if next is falsey (null)
-    if(!data.next){
+    if (!data.next) {
         // give it the disabled attribute so user can no longer use it
         nextBtn.setAttribute('disabled', true);
     } else {
@@ -703,7 +790,7 @@ const CreatePlanetsElements = (data, inject) => {
         });
     }
     // same idea with previous property
-    if(!data.previous){
+    if (!data.previous) {
         prevBtn.setAttribute('disabled', true);
     } else {
         prevBtn.removeAttribute('disabled');
@@ -717,61 +804,47 @@ const CreatePlanetsElements = (data, inject) => {
 
     btnCol.append(prevBtn, nextBtn);
     btnRow.append(btnCol);
-
-    // <div class="row justify-content-center text-white">
-        const mainRow = document.createElement('div');
-        mainRow.className = 'row justify-content-center text-white';
+    const mainRow = document.createElement('div');
+    mainRow.className = 'row justify-content-center text-white';
 
     data.results.forEach(planet => {
         let residentsArr = [];
         let filmsArr = [];
-        
-        //     <div class="col-4 mx-5 mb-5 bg-dark bg-opacity-75 border border-info rounded-circle text-center font-monospace p-4">
+
         const mainCol = document.createElement('div');
         mainCol.className = 'col-6 mx-5 mb-5 bg-dark bg-opacity-75 border border-info rounded-circle text-center font-monospace p-5 overflow-scroll';
-        //         <p class="fs-3 text-success fw-bold">Tatooine</p>
         const pName = document.createElement('p');
         pName.className = 'fs-3 text-success fw-bold';
         pName.textContent = `${planet.name}`;
-        //         <p>Terrain: <span class="fs-4 text-primary">Desert</span></p>
         const pTerrain = document.createElement('p');
         pTerrain.className = 'overflow-auto'
         pTerrain.innerHTML = `Terrain: <span class="fs-4 text-primary m-0 text-truncate">${planet.terrain}</span>`;
-        //         <p>Climate: <span class="fs-4 text-warning">Arid</span></p>
         const pClimate = document.createElement('p');
         pClimate.innerHTML = `Cimate: <span class="fs-4 text-warning">${planet.climate}</span>`;
-        //         <p>Surfuace Water: <span class="text-light">1</span></p>
         const pSurfaceWater = document.createElement('p');
         pSurfaceWater.innerHTML = `Surface Water: <span class="text-info">${planet.surface_water}</span>`;
-        //         <p>Gravity: <span>1</span></p>
         const pGravity = document.createElement('p');
         pGravity.innerHTML = `Gravity: <span class="text-info">${planet.gravity}</span>`
-        //         <p>Population: <span>200000</span></p>
         const pPopulation = document.createElement('p');
         pPopulation.innerHTML = `Population: <span class="text-info">${planet.population}</span>`;
-        //         <p>Diameter: <span>10465</span></p>
         const pDiameter = document.createElement('p');
         pDiameter.innerHTML = `Diameter: <span class="text-info">${planet.diameter}</span>`;
-        //         <p>Orbital Period: 304</p>
         const pOrbit = document.createElement('p');
         pOrbit.innerHTML = `Orbital Period: <span class="text-info">${planet.orbital_period}</span>`;
-        //         <p>Residents: </p>
         const pResidents = document.createElement('p');
         pResidents.className = 'overflow-auto';
         planet.residents.length === 0 ? pResidents.innerHTML = 'Residents: N/A' : planet.residents.forEach(async resident => {
-                pResidents.innerHTML = '<div class="d-flex align-items-center text-warning"><strong>Loading...</strong><div class="spinner-border ms-auto text-warning" role="status" aria-hidden="true"></div></div>';
-                residentsArr.push(await GetPeopleNames(resident));
-                pResidents.innerHTML = ` Residents: <span class="text-success">${residentsArr.join(', ')}</span>` ;
-            });
-        //         <p>Films: </p>
+            pResidents.innerHTML = '<div class="d-flex align-items-center text-warning"><strong>Loading...</strong><div class="spinner-border ms-auto text-warning" role="status" aria-hidden="true"></div></div>';
+            residentsArr.push(await GetPeopleNames(resident));
+            pResidents.innerHTML = ` Residents: <span class="text-success">${residentsArr.join(', ')}</span>`;
+        });
         const pFilms = document.createElement('p');
         pFilms.className = 'overflow-auto';
         planet.films.length === 0 ? pFilms.innerHTML = 'Films: N/A' : planet.films.forEach(async film => {
             pResidents.innerHTML = '<div class="d-flex align-items-center text-warning"><strong>Loading...</strong><div class="spinner-border ms-auto text-warning" role="status" aria-hidden="true"></div></div>';
             filmsArr.push(await GetFilms(film));
             pFilms.innerHTML = `Films: <span class="text-danger">${filmsArr.join(', ')}</span>`;
-        })
-        //     </div>
+        });
 
         mainCol.append(pName, pTerrain, pClimate, pSurfaceWater, pGravity, pPopulation, pDiameter, pOrbit, pResidents, pFilms);
 
@@ -783,21 +856,64 @@ const CreatePlanetsElements = (data, inject) => {
     inject.append(content);
 }
 
+const CreateSearchedPlanetElements = (data, inject) => {
+    const container = document.createElement('div');
+    container.className = 'container';
+    const mainRow = document.createElement('div');
+    mainRow.className = 'row justify-content-center text-white';
+
+    data.results.forEach(planet => {
+        let residentsArr = [];
+        let filmsArr = [];
+
+        const mainCol = document.createElement('div');
+        mainCol.className = 'col-6 mx-5 mb-5 bg-dark bg-opacity-75 border border-info rounded-circle text-center font-monospace p-5 overflow-scroll';
+        const pName = document.createElement('p');
+        pName.className = 'fs-3 text-success fw-bold';
+        pName.textContent = `${planet.name}`;
+        const pTerrain = document.createElement('p');
+        pTerrain.className = 'overflow-auto'
+        pTerrain.innerHTML = `Terrain: <span class="fs-4 text-primary m-0 text-truncate">${planet.terrain}</span>`;
+        const pClimate = document.createElement('p');
+        pClimate.innerHTML = `Cimate: <span class="fs-4 text-warning">${planet.climate}</span>`;
+        const pSurfaceWater = document.createElement('p');
+        pSurfaceWater.innerHTML = `Surface Water: <span class="text-info">${planet.surface_water}</span>`;
+        const pGravity = document.createElement('p');
+        pGravity.innerHTML = `Gravity: <span class="text-info">${planet.gravity}</span>`
+        const pPopulation = document.createElement('p');
+        pPopulation.innerHTML = `Population: <span class="text-info">${planet.population}</span>`;
+        const pDiameter = document.createElement('p');
+        pDiameter.innerHTML = `Diameter: <span class="text-info">${planet.diameter}</span>`;
+        const pOrbit = document.createElement('p');
+        pOrbit.innerHTML = `Orbital Period: <span class="text-info">${planet.orbital_period}</span>`;
+        const pResidents = document.createElement('p');
+        pResidents.className = 'overflow-auto';
+        planet.residents.length === 0 ? pResidents.innerHTML = 'Residents: N/A' : planet.residents.forEach(async resident => {
+            pResidents.innerHTML = '<div class="d-flex align-items-center text-warning"><strong>Loading...</strong><div class="spinner-border ms-auto text-warning" role="status" aria-hidden="true"></div></div>';
+            residentsArr.push(await GetPeopleNames(resident));
+            pResidents.innerHTML = ` Residents: <span class="text-success">${residentsArr.join(', ')}</span>`;
+        });
+        const pFilms = document.createElement('p');
+        pFilms.className = 'overflow-auto';
+        planet.films.length === 0 ? pFilms.innerHTML = 'Films: N/A' : planet.films.forEach(async film => {
+            pResidents.innerHTML = '<div class="d-flex align-items-center text-warning"><strong>Loading...</strong><div class="spinner-border ms-auto text-warning" role="status" aria-hidden="true"></div></div>';
+            filmsArr.push(await GetFilms(film));
+            pFilms.innerHTML = `Films: <span class="text-danger">${filmsArr.join(', ')}</span>`;
+        });
+
+        mainCol.append(pName, pTerrain, pClimate, pSurfaceWater, pGravity, pPopulation, pDiameter, pOrbit, pResidents, pFilms);
+
+        mainRow.append(mainCol);
+    });
+
+    container.append(mainRow);
+
+    inject.append(container);
+}
+
 const CreateFilmsElements = (data, inject) => {
     const container = document.createElement('div');
     container.className = 'container';
-    // const btnRow = document.createElement('div');
-    // btnRow.className = 'row mx-5';
-    // const btnCol = document.createElement('div');
-    // btnCol.className = 'col-12 d-flex justify-content-between';
-
-    // const nextBtn = document.createElement('button');
-    // nextBtn.className = 'btn btn-danger text-dark';
-    // nextBtn.innerHTML = 'Next <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/></svg>';
-
-    // const prevBtn = document.createElement('button');
-    // prevBtn.className = 'btn btn-danger text-dark';
-    // prevBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/></svg> Previous'
 
     const mainRow = document.createElement('div');
     mainRow.className = 'row justify-content-center';
@@ -807,80 +923,56 @@ const CreateFilmsElements = (data, inject) => {
         let speciesArr = [];
         let vehiclesArr = [];
         let starshipsArr = [];
-        // <div class="col-10 border border-2 border-success rounded bg-dark bg-opacity-50 text-white p-4">
+
         const mainCol = document.createElement('div');
         mainCol.className = 'col-10 mb-5 border border-2 border-success rounded bg-dark bg-opacity-50 text-white p-4';
-        //             <div class="row">
         const mainInfoRow = document.createElement('div');
         mainInfoRow.className = 'row';
-        //                 <div class="col-4 d-flex flex-column align-items-center">
         const firstInfoCol = document.createElement('div');
         firstInfoCol.className = 'col-4 d-flex flex-column align-items-center';
-        //                     <p class="fs-1 fw-bold text-danger m-0">Title</p>
         const pTitle = document.createElement('p');
         pTitle.className = 'fs-2 text-center fw-bold text-danger m-0';
         pTitle.textContent = `${film.title}`;
-        //                     <p class="fw-bold fs-3">Episode: <span class="text-danger text-decoration-underline">4</span></p>
         const pEpisode = document.createElement('p');
         pEpisode.className = 'fw-bold fs-3';
         pEpisode.innerHTML = `Episode: <span class="text-danger text-decoration-underline">${film.episode_id}</span>`;
-        //                 </div>
         firstInfoCol.append(pTitle, pEpisode)
-        //                 <div class="col-4">
         const secondInfoCol = document.createElement('div');
         secondInfoCol.className = 'col-4';
-        //                     <p class="fw-bold fs-4">Director: <span class="text-primary fw-normal">George Lucas</span></p>
         const pDirector = document.createElement('p');
         pDirector.className = 'fw-bold fs-4';
         pDirector.innerHTML = `Director: <span class="text-primary fw-normal">${film.director}</span>`;
-        //                     <p class="fw-bold fs-5">Producer(s): <span class="text-info fw-normal">Rick McCallum</span></p>
         const pProducer = document.createElement('p');
         pProducer.className = 'fw-bold fs-5';
         pProducer.innerHTML = `Producer(s): <span class="text-info fw-normal">${film.producer}</span>`;
-        //                 </div>
         secondInfoCol.append(pDirector, pProducer);
-        //                 <div class="col-4">
         const thirdInfoCol = document.createElement('div');
         thirdInfoCol.className = 'col-4';
-        //                     <p class="fw-bold fs-3">Release Date: <span class="text-warning fw-normal">2/24/1975</span></p>
         const pDate = document.createElement('p');
         pDate.className = 'fw-bold fs-3';
         pDate.innerHTML = `Release Date: <span class="text-warning fw-normal">${film.release_date}</span>`;
-        //                 </div>
         thirdInfoCol.append(pDate);
-        //             </div>
         mainInfoRow.append(firstInfoCol, secondInfoCol, thirdInfoCol);
-        //             <div class="row">
         const openCrawlRow = document.createElement('div');
         openCrawlRow.className = 'row';
-        //                 <div class="col-12 d-flex flex-column align-items-center">
         const crawlCol = document.createElement('div');
         crawlCol.className = 'col-12 d-flex flex-column align-items-center';
-        //                     <p class="fw-bold fs-3 text-warning" >Opening Scrawl:</p>
         const pCrawlTitle = document.createElement('p');
         pCrawlTitle.className = 'fw-bold fs-3 text-warning';
-        pCrawlTitle.textContent = 'Opening Crawl:'
-        //                     <p class="text-center text-bg-dark text-warning fw-bold w-50">Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis enim obcaecati aut deleniti ea alias necessitatibus repudiandae, at similique? Maxime, delectus repellat harum fugit, sit numquam aliquid dolorum nobis asperiores explicabo impedit, rem doloribus hic alias sunt. Nihil, neque praesentium magni vel exercitationem quasi accusamus, delectus soluta nostrum culpa sed!</p>
+        pCrawlTitle.textContent = 'Opening Crawl:';
         const pCrawlText = document.createElement('p');
         pCrawlText.className = 'text-center text-bg-dark text-warning fw-bold w-50';
         pCrawlText.textContent = `${film.opening_crawl}`;
-        //                 </div>
         crawlCol.append(pCrawlTitle, pCrawlText);
-        //             </div>
         openCrawlRow.append(crawlCol);
-        //             <div class="row">
         const listsRow = document.createElement('div');
         listsRow.className = 'row';
-        //                 <div class="col-3">
         const planetsCol = document.createElement('div');
         planetsCol.className = 'col-3';
-        //                     <p class="text-center">Planets</p>
         const pPlanetTitle = document.createElement('p');
         pPlanetTitle.className = 'text-center';
-        pPlanetTitle.textContent = 'Planets'
-        //                     <hr>
+        pPlanetTitle.textContent = 'Planets';
         const firstHrPlanet = document.createElement('hr');
-        //                     <p class="purpleText bg-dark p-3 fst-italic text-wrap"> Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis, nisi!</p>
         const pPlanetsList = document.createElement('p');
         pPlanetsList.className = 'purpleText bg-dark p-3 fst-italic text-wrap';
         film.planets.length === 0 ? pPlanetsList.textContent = 'N/A' : film.planets.forEach(async planet => {
@@ -888,20 +980,14 @@ const CreateFilmsElements = (data, inject) => {
             planetsArr.push(await GetPlanetsByName(planet));
             pPlanetsList.textContent = `${planetsArr.join(', ')}`;
         });
-        //                     <hr>
         const secondHrPlanet = document.createElement('hr');
-        //                 </div>
         planetsCol.append(pPlanetTitle, firstHrPlanet, pPlanetsList, secondHrPlanet);
-        //                 <div class="col-3">
         const speciesCol = document.createElement('div');
         speciesCol.className = 'col-3';
-        //                     <p class="text-center">Species</p>
         const pSpeciesTitle = document.createElement('p');
         pSpeciesTitle.className = 'text-center';
-        pSpeciesTitle.textContent = 'Species'
-        //                     <hr>
+        pSpeciesTitle.textContent = 'Species';
         const firstHrSpecies = document.createElement('hr');
-        //                     <p class="purpleText bg-dark p-3 fst-italic text-wrap"> Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis, nisi!</p>
         const pSpeciesList = document.createElement('p');
         pSpeciesList.className = 'purpleText bg-dark p-3 fst-italic text-wrap';
         film.species.length === 0 ? pSpeciesList.innerHTML = 'N/A' : film.species.forEach(async species => {
@@ -909,20 +995,14 @@ const CreateFilmsElements = (data, inject) => {
             speciesArr.push(await GetSpeciesByName(species));
             pSpeciesList.innerHTML = `${speciesArr.join(', ')}`;
         });
-        //                     <hr>
         const secondHrSpecies = document.createElement('hr');
-        //                 </div>
         speciesCol.append(pSpeciesTitle, firstHrSpecies, pSpeciesList, secondHrSpecies);
-        //                 <div class="col-3">
         const starshipsCol = document.createElement('div');
         starshipsCol.className = 'col-3';
-        //                     <p class="text-center">Starships</p>
         const pStarshipTitle = document.createElement('p');
         pStarshipTitle.className = 'text-center';
         pStarshipTitle.textContent = 'Starships';
-        //                     <hr>
         const firstHrStarship = document.createElement('hr');
-        //                     <p class="purpleText bg-dark p-3 fst-italic text-wrap"> Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis, nisi!</p>
         const pStarshipList = document.createElement('p');
         pStarshipList.className = 'purpleText bg-dark p-3 fst-italic text-wrap';
         film.starships.length === 0 ? pStarshipList.textContent = 'N/A' : film.starships.forEach(async starship => {
@@ -930,20 +1010,14 @@ const CreateFilmsElements = (data, inject) => {
             starshipsArr.push(await GetStarshipsByName(starship));
             pStarshipList.textContent = `${starshipsArr.join(', ')}`;
         });
-        //                     <hr>
         const secondHrStarship = document.createElement('hr');
-        //                 </div>
         starshipsCol.append(pStarshipTitle, firstHrStarship, pStarshipList, secondHrStarship);
-        //                 <div class="col-3">
         const vehiclesCol = document.createElement('div');
         vehiclesCol.className = 'col-3';
-        //                     <p class="text-center">Vehicles</p>
         const pVehiclesTitle = document.createElement('p');
         pVehiclesTitle.className = 'text-center';
         pVehiclesTitle.textContent = 'Vehicles';
-        //                     <hr>
         const firstHrVehicles = document.createElement('hr');
-        //                     <p class="purpleText bg-dark p-3 fst-italic text-wrap"> Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis, nisi!</p>
         const pVehiclesList = document.createElement('p');
         pVehiclesList.className = 'purpleText bg-dark p-3 fst-italic text-wrap';
         film.vehicles.length === 0 ? pVehiclesList.textContent = 'N/A' : film.vehicles.forEach(async vehicle => {
@@ -951,20 +1025,13 @@ const CreateFilmsElements = (data, inject) => {
             vehiclesArr.push(await GetVehiclesByName(vehicle));
             pVehiclesList.textContent = `${vehiclesArr.join(', ')}`;
         });
-        //                     <hr>
         const secondHrVehicles = document.createElement('hr');
-        //                 </div>
         vehiclesCol.append(pVehiclesTitle, firstHrVehicles, pVehiclesList, secondHrVehicles);
-        //             </div>
         listsRow.append(planetsCol, speciesCol, starshipsCol, vehiclesCol);
-        //         </div>
-
         mainCol.append(mainInfoRow, openCrawlRow, listsRow);
         mainRow.append(mainCol);
     });
 
-    // btnCol.append(prevBtn, nextBtn);
-    // btnRow.append(btnCol);
     container.append(mainRow);
     inject.append(container);
 }
@@ -973,4 +1040,4 @@ const CreateWelcomeMessage = () => {
 
 }
 
-export { CreateCharacterCard, ActivateStarFighter, CreateVehicleElements, CreateSearchedCharacterCard, CreateSearchedVehicleElements, CreateWelcomeMessage, CreateStarshipElements, CreatePlanetsElements, CreateFilmsElements };
+export { CreateCharacterCard, ActivateStarFighter, CreateVehicleElements, CreateSearchedCharacterCard, CreateSearchedVehicleElements, CreateWelcomeMessage, CreateStarshipElements, CreatePlanetsElements, CreateFilmsElements, CreateSearchedStarshipElements, CreateSearchedPlanetElements };

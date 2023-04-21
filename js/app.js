@@ -1,4 +1,4 @@
-import { CreateSearchedCharacterCard, ActivateStarFighter, CreateSearchedVehicleElements, CreateCharacterCard } from "../services/functions.js";
+import { CreateSearchedCharacterCard, ActivateStarFighter, CreateSearchedVehicleElements, CreateCharacterCard, CreateSearchedStarshipElements, CreateSearchedPlanetElements, CreateFilmsElements } from "../services/functions.js";
 // import { GetRandomCategoryItem } from "../services/data.js";
 
 // Global Variables
@@ -12,7 +12,7 @@ let categoriesArr = ['people', 'vehicles', 'starships', 'planets', 'species', 'f
 
 
 // Functions
-const SearchCategory = async (category = 'people', search) => {
+const SearchCategory = async (category, search) => {
     console.log(category, search);
     const response = await fetch(`https://swapi.dev/api/${category}/?search=${search}`);
     const data = await response.json();
@@ -21,7 +21,7 @@ const SearchCategory = async (category = 'people', search) => {
 }
 
 // await GetRandomCategoryItem(categoriesArr, injectHere);
-if(selectInput.value === 'Search by category'){
+if (selectInput.value === 'Search by category') {
     console.log(selectInput.value);
     userInput.setAttribute('disabled', true);
 }
@@ -29,7 +29,7 @@ if(selectInput.value === 'Search by category'){
 // Event Listeners
 selectInput.addEventListener('click', function () {
     // console.log(selectInput.value);
-    if(selectInput.value === 'Search by category'){
+    if (selectInput.value === 'Search by category') {
         console.log(selectInput.value);
         userInput.setAttribute('disabled', true);
     }
@@ -51,6 +51,16 @@ userInput.addEventListener('change', function () {
 searchBtn.addEventListener('click', async function () {
     console.log('clicked')
     console.log(userSearch);
+    if(userInput.value === ''){
+        userInput.classList.remove('border-warning', 'text-warning');
+        userInput.classList.add('border-danger', 'text-danger');
+        userInput.placeholder = 'Please make an entry';
+        return;
+    } else {
+        userInput.classList.remove('border-danger', 'text-danger');
+        userInput.classList.add('border-warning', 'text-warning');
+        userInput.placeholder = 'I want to search for...';
+    }
     injectHere.innerHTML = `<div class="row">
     <div class="col-12 d-flex flex-column align-items-center floater">
         <img src="../assets/images/icons8-baby-yoda-144.png" alt="Baby Yoda Loading Icon">
@@ -63,9 +73,14 @@ searchBtn.addEventListener('click', async function () {
     console.log(selectionData);
     if (categoryPicked === 'people') {
         CreateSearchedCharacterCard(selectionData, injectHere);
-    }
-    else if (categoryPicked === 'vehicles') {
+    } else if (categoryPicked === 'vehicles') {
         CreateSearchedVehicleElements(selectionData, injectHere);
+    } else if (categoryPicked === 'starships') {
+        CreateSearchedStarshipElements(selectionData, injectHere);
+    } else if (categoryPicked === 'planets') {
+        CreateSearchedPlanetElements(selectionData, injectHere);
+    } else if (categoryPicked === 'films') {
+        CreateFilmsElements(selectionData, injectHere);
     } else if (selectionData.results.length === 0) {
         injectHere.innerHTML = `
         <div class="row justify-content-center fadeIn">
@@ -76,10 +91,16 @@ searchBtn.addEventListener('click', async function () {
             </div>
         </div>
         `;
-    }
-    else {
-        CreateSearchedCharacterCard(selectionData, injectHere);
-        console.log(selectionData);
+    } else if (selectionData.count === 0){
+        injectHere.innerHTML = `
+        <div class="row justify-content-center fadeIn">
+            <div class="col-6 border border-danger border-3 bg-dark rounded p-3">
+                <h3 class="text-center text-danger">
+                Sorry, we were unable to process your request. It appears that the keyword you entered was invalid or not found in our system. Please check your spelling and try again.
+                </h3>
+            </div>
+        </div>
+        `;
     }
 
 });
