@@ -162,10 +162,10 @@ const CreateVehicleElements = async (func, inject) => {
     firstCol.className = 'col-12 d-flex justify-content-between mb-5';
     let prevButton = document.createElement('div');
     prevButton.className = 'btn btn-danger text-dark fw-bolder';
-    prevButton.innerHTML = '&#10229; Previous';
+    prevButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/></svg> Previous';
     let nextButton = document.createElement('div');
     nextButton.className = 'btn btn-danger text-dark fw-bolder';
-    nextButton.innerHTML = 'Next &#10230;';
+    nextButton.innerHTML = 'Next <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/></svg>';
 
     firstCol.append(prevButton, nextButton);
 
@@ -756,8 +756,8 @@ const CreateSearchedStarshipElements = (data, inject) => {
 
 const CreatePlanetsElements = (data, inject) => {
 
-    console.log('Data initially passed in when first called');
-    console.log(data);
+    // console.log('Data initially passed in when first called');
+    // console.log(data);
     const content = document.createElement('div');
     content.className = 'container';
 
@@ -768,11 +768,11 @@ const CreatePlanetsElements = (data, inject) => {
     btnCol.className = 'col-12 d-flex justify-content-between';
 
     const nextBtn = document.createElement('button');
-    nextBtn.className = 'btn btn-danger text-dark';
+    nextBtn.className = 'btn btn-danger text-dark fw-bold';
     nextBtn.innerHTML = 'Next <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/></svg>';
 
     const prevBtn = document.createElement('button');
-    prevBtn.className = 'btn btn-danger text-dark';
+    prevBtn.className = 'btn btn-danger text-dark fw-bold';
     prevBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/></svg> Previous';
 
     // if next is falsey (null)
@@ -812,7 +812,7 @@ const CreatePlanetsElements = (data, inject) => {
         let filmsArr = [];
 
         const mainCol = document.createElement('div');
-        mainCol.className = 'col-6 mx-5 mb-5 bg-dark bg-opacity-75 border border-info rounded-circle text-center font-monospace p-5 overflow-scroll';
+        mainCol.className = 'col-8 mx-5 mb-5 bg-dark bg-opacity-75 border border-info rounded text-center font-monospace p-1';
         const pName = document.createElement('p');
         pName.className = 'fs-3 text-success fw-bold';
         pName.textContent = `${planet.name}`;
@@ -832,14 +832,14 @@ const CreatePlanetsElements = (data, inject) => {
         const pOrbit = document.createElement('p');
         pOrbit.innerHTML = `Orbital Period: <span class="text-info">${planet.orbital_period}</span>`;
         const pResidents = document.createElement('p');
-        pResidents.className = 'overflow-auto';
+        // pResidents.className = '';
         planet.residents.length === 0 ? pResidents.innerHTML = 'Residents: N/A' : planet.residents.forEach(async resident => {
             pResidents.innerHTML = '<div class="d-flex align-items-center text-warning"><strong>Loading...</strong><div class="spinner-border ms-auto text-warning" role="status" aria-hidden="true"></div></div>';
             residentsArr.push(await GetPeopleNames(resident));
             pResidents.innerHTML = ` Residents: <span class="text-success">${residentsArr.join(', ')}</span>`;
         });
         const pFilms = document.createElement('p');
-        pFilms.className = 'overflow-auto';
+        // pFilms.className = 'overflow-auto';
         planet.films.length === 0 ? pFilms.innerHTML = 'Films: N/A' : planet.films.forEach(async film => {
             pResidents.innerHTML = '<div class="d-flex align-items-center text-warning"><strong>Loading...</strong><div class="spinner-border ms-auto text-warning" role="status" aria-hidden="true"></div></div>';
             filmsArr.push(await GetFilms(film));
@@ -867,7 +867,7 @@ const CreateSearchedPlanetElements = (data, inject) => {
         let filmsArr = [];
 
         const mainCol = document.createElement('div');
-        mainCol.className = 'col-6 mx-5 mb-5 bg-dark bg-opacity-75 border border-info rounded-circle text-center font-monospace p-5 overflow-scroll';
+        mainCol.className = 'col-8 mx-5 mb-5 bg-dark bg-opacity-75 border border-info rounded text-center font-monospace p-1';
         const pName = document.createElement('p');
         pName.className = 'fs-3 text-success fw-bold';
         pName.textContent = `${planet.name}`;
@@ -879,7 +879,7 @@ const CreateSearchedPlanetElements = (data, inject) => {
         const pSurfaceWater = document.createElement('p');
         pSurfaceWater.innerHTML = `Surface Water: <span class="text-info">${planet.surface_water}</span>`;
         const pGravity = document.createElement('p');
-        pGravity.innerHTML = `Gravity: <span class="text-info">${planet.gravity}</span>`
+        pGravity.innerHTML = `Gravity: <span class="text-info">${planet.gravity}</span>`;
         const pPopulation = document.createElement('p');
         pPopulation.innerHTML = `Population: <span class="text-info">${planet.population}</span>`;
         const pDiameter = document.createElement('p');
@@ -887,14 +887,14 @@ const CreateSearchedPlanetElements = (data, inject) => {
         const pOrbit = document.createElement('p');
         pOrbit.innerHTML = `Orbital Period: <span class="text-info">${planet.orbital_period}</span>`;
         const pResidents = document.createElement('p');
-        pResidents.className = 'overflow-auto';
+        // pResidents.className = 'overflow-auto';
         planet.residents.length === 0 ? pResidents.innerHTML = 'Residents: N/A' : planet.residents.forEach(async resident => {
             pResidents.innerHTML = '<div class="d-flex align-items-center text-warning"><strong>Loading...</strong><div class="spinner-border ms-auto text-warning" role="status" aria-hidden="true"></div></div>';
             residentsArr.push(await GetPeopleNames(resident));
             pResidents.innerHTML = ` Residents: <span class="text-success">${residentsArr.join(', ')}</span>`;
         });
         const pFilms = document.createElement('p');
-        pFilms.className = 'overflow-auto';
+        // pFilms.className = 'overflow-auto';
         planet.films.length === 0 ? pFilms.innerHTML = 'Films: N/A' : planet.films.forEach(async film => {
             pResidents.innerHTML = '<div class="d-flex align-items-center text-warning"><strong>Loading...</strong><div class="spinner-border ms-auto text-warning" role="status" aria-hidden="true"></div></div>';
             filmsArr.push(await GetFilms(film));

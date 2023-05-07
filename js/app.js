@@ -5,6 +5,7 @@ import { CreateSearchedCharacterCard, ActivateStarFighter, CreateSearchedVehicle
 let userInput = document.querySelector('#userInput');
 let searchBtn = document.querySelector('#searchBtn');
 let selectInput = document.querySelector('#selectInput');
+let heroText = document.querySelector('#heroText');
 const injectHere = document.querySelector('#injectHere');
 const starFighter = document.querySelector('#starFighter');
 let userSearch, categoryPicked, selectionData;
@@ -51,6 +52,12 @@ userInput.addEventListener('change', function () {
 searchBtn.addEventListener('click', async function () {
     console.log('clicked')
     console.log(userSearch);
+    if(selectInput.value === 'Search by category'){
+        heroText.textContent = 'Please select a category';
+    }
+    else {
+        heroText.textContent = "Select a category to start searchin'";
+    }
     if(userInput.value === ''){
         userInput.classList.remove('border-warning', 'text-warning');
         userInput.classList.add('border-danger', 'text-danger');
@@ -61,12 +68,15 @@ searchBtn.addEventListener('click', async function () {
         userInput.classList.add('border-warning', 'text-warning');
         userInput.placeholder = 'I want to search for...';
     }
-    injectHere.innerHTML = `<div class="row">
-    <div class="col-12 d-flex flex-column align-items-center floater">
-        <img src="../assets/images/icons8-baby-yoda-144.png" alt="Baby Yoda Loading Icon">
-        <p class="text-white font-monospace fs-2">Loading...</p>
-    </div>
-</div>`;
+    injectHere.innerHTML = `
+    <div class="container">
+        <div class="row">
+            <div class="col-12 d-flex flex-column align-items-center floater">
+                <img src="../assets/images/icons8-baby-yoda-144.png" alt="Baby Yoda Loading Icon">
+                <p class="text-white font-monospace fs-2">Loading...</p>
+            </div>
+        </div>
+    </div>`;
     selectionData = await SearchCategory(categoryPicked, userSearch);
     injectHere.innerHTML = '';
     userInput.value = '';
