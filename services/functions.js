@@ -525,8 +525,8 @@ const CreateSearchedVehicleElements = async (func, inject) => {
 }
 
 const CreateStarshipElements = async (func, inject) => {
-    console.log(func.previous);
-    console.log(func.next)
+    // console.log(func.previous);
+    // console.log(func.next)
     const content = document.createElement('div');
     content.className = 'container'
 
@@ -552,12 +552,12 @@ const CreateStarshipElements = async (func, inject) => {
     btnRow.append(btnCol);
     content.append(btnRow);
 
-    console.log(func.next)
+    // console.log(func.next)
     if (!func.next) {
-        console.log(func.next)
+        // console.log(func.next)
         nextBtn.setAttribute('disabled', true);
     } else {
-        console.log(func.next);
+        // console.log(func.next);
         nextBtn.removeAttribute('disabled');
         nextBtn.addEventListener('click', async () => {
             inject.innerHTML = '<div class="row"><div class="col-12 d-flex flex-column align-items-center floater"><img src="../assets/images/icons8-baby-yoda-144.png" alt="Baby Yoda Loading Icon"><p class="text-white font-monospace fs-2">Loading...</p></div></div>';
@@ -569,10 +569,10 @@ const CreateStarshipElements = async (func, inject) => {
     }
 
     if (!func.previous) {
-        console.log(func.previous);
+        // console.log(func.previous);
         prevBtn.setAttribute('disabled', true);
     } else {
-        console.log(func.previous);
+        // console.log(func.previous);
         prevBtn.removeAttribute('disabled');
         prevBtn.addEventListener('click', async () => {
             inject.innerHTML = '<div class="row"><div class="col-12 d-flex flex-column align-items-center floater"><img src="../assets/images/icons8-baby-yoda-144.png" alt="Baby Yoda Loading Icon"><p class="text-white font-monospace fs-2">Loading...</p></div></div>';
